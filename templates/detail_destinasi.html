@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trip Wonders | Detail Destinasi</title>
+    <!-- Favicon-->
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../static/img/myservices/logo.png"
+    />
+    <!-- Font Awesome icons (free version)-->
+    <script
+      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- Bulma -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <!-- bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <link href="../static/css/mystyle.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style>
+      a {
+        text-decoration: none;
+        /* Menghilangkan garis bawah */
+        color: inherit;
+        /* Menggunakan warna teks default */
+      }
+
+      a:hover {
+        text-decoration: none;
+        /* Menghilangkan garis bawah saat dihover */
+        color: inherit;
+        /* Tetap menggunakan warna teks default saat dihover */
+      }
+
+      h1 span {
+        position: absolute;
+        top: -90px;
+      }
+    </style>
+
+    <script>
+      function totalHarga() {
+        let hargaTiket = document.getElementById("hargaTiket").value;
+        let jumlahTiket = document.getElementById("jumlahTiket").value;
+
+        let hasilPerkalian = hargaTiket * jumlahTiket;
+
+        document.getElementById("totalHargaTiket").value = hasilPerkalian;
+      }
+
+      function hapus() {
+        $('.jumlahTiket').val("");
+        $('.totalHargaTiket').val("");
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- Navbar start-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand pt-3" href="#page-top"
+          ><img src="../static/img/logo.svg" alt="..."
+        /></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Menu
+          <i class="fas fa-bars ms-1"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul
+            class="navbar-nav text-uppercase text-center ms-auto py-4 py-lg-0"
+          >
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/destinasi">Destinations</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About Us</a>
+            </li>
+          </ul>
+          <!-- {% if not logged_in %} -->
+          <button class="btn btn-light ms-auto">
+            <a href="/login">Login</a>
+          </button>
+          <button class="btn btn-warning ms-2">
+            <a href="/sign-up">Sign Up</a>
+          </button>
+          <!-- {% endif %} -->
+
+          <!-- {% if logged_in %} -->
+          <!-- user menu start-->
+          <div
+            class="dropdown text-uppercase text-center no-arrow navbar-nav ms-auto"
+          >
+            <a
+              class="dropdown-toggle nav-item nav-link"
+              type="button"
+              id="usermenu"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="mr-2 d-none d-lg-inline small"
+                >{{ user_info.name }}</span
+              >
+              <img
+                class="img-profile rounded-circle"
+                src="../static/img/profile_placeholder.png"
+              />
+            </a>
+            <ul class="dropdown-menu submenu dropdown-menu-dark">
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="fas fa-user fa-sm fa-fw mr-2"></i>Profile</a
+                >
+              </li>
+
+              <!-- {% if is_admin %} -->
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="fas fa-chart-line fa-sm fa-fw mr-2"></i
+                  >Dashboard</a
+                >
+              </li>
+              <!-- {% else %} -->
+              <li>
+                <a class="dropdown-item" href="/cek_pesanan"
+                  ><i class="fas fa-ticket fa-sm fa-fw mr-2"></i>Cek Pesanan</a
+                >
+              </li>
+              <!-- {% endif %} -->
+
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+                  Logout</a
+                >
+              </li>
+            </ul>
+          </div>
+          <!-- end user menu -->
+          <!-- {% endif %} -->
+        </div>
+      </div>
+    </nav>
+    <!-- navbar end -->
+
+    <!-- carousel start -->
+    <section id="home" class="mycontainer">
+      <div id="slide">
+        <div class="overlay"></div>
+        <div
+          class="item"
+          style="
+            background-image: url(../static/img/detail_destinasi/gambarAttraction1.jpeg);
+          "
+        >
+          <div class="content">
+            <!-- judul attraction 1 -->
+            <div class="attr-title">{{ destinasi_info.namaAttr1 }}</div>
+            <!-- subjudul attraction 1 -->
+            <div class="des">
+              Jantung pusat kota Yogyakarta, tidak hanya menjadi pusat
+              perbelanjaan, tetapi juga merangkul kekayaan budaya dan sejarah
+              kota.
+            </div>
+            <div class="tombol-container">
+              <button
+                class="btn btn-light mb-2"
+                data-bs-toggle="modal"
+                data-bs-target="#mymodal"
+                data-bs-attraction="{{ destinasi_info.namaAttr1 }}"
+                data-bs-pemesan="{{ user_info.name }}"
+                data-bs-hargaTiket="{{ destinasi_info.hargaTiketAttr1 }}"
+              >
+                Pesan Tiket
+              </button>
+              <a href="#attraction1"
+                ><button class="btn btn-outline-light">Lihat Detail</button></a
+              >
+            </div>
+          </div>
+        </div>
+        <div
+          class="item"
+          style="
+            background-image: url(../static/img/detail_destinasi/gambarAttraction2.jpg);
+          "
+        >
+          <div class="content">
+            <div class="attr-title">{{ destinasi_info.namaAttr2 }}</div>
+            <div class="des">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde
+              voluptatum
+            </div>
+            <div class="tombol-container">
+              <!-- ganti dengan Jinja2 -->
+              <button
+                class="btn btn-light mb-2"
+                data-bs-toggle="modal"
+                data-bs-target="#mymodal"
+                data-bs-attraction="{{ destinasi_info.namaAttr2 }}"
+                data-bs-pemesan="{{ user_info.name }}"
+                data-bs-hargaTiket="{{ destinasi_info.hargaTiketAttr2 }}"
+              >
+                Pesan Tiket
+              </button>
+              <a href="#attraction2"
+                ><button class="btn btn-outline-light">Lihat Detail</button></a
+              >
+            </div>
+          </div>
+        </div>
+        <div
+          class="item"
+          style="
+            background-image: url(../static/img/detail_destinasi/gambarAttraction3.jpg);
+          "
+        >
+          <div class="content">
+            <div class="attr-title">{{ destinasi_info.namaAttr3 }}</div>
+            <div class="des">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde
+              voluptatum
+            </div>
+            <div class="tombol-container">
+              <button
+                class="btn btn-light mb-2"
+                data-bs-toggle="modal"
+                data-bs-target="#mymodal"
+                data-bs-attraction="{{ destinasi_info.namaAttr3 }}"
+                data-bs-pemesan="{{ user_info.name }}"
+                data-bs-hargaTiket="{{ destinasi_info.hargaTiketAttr3 }}"
+              >
+                Pesan Tiket
+              </button>
+              <a href="#attraction3"
+                ><button class="btn btn-outline-light">Lihat Detail</button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mybuttons">
+        <button onclick="prev()" id="prev">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
+        <button onclick="next()" id="next">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
+    </section>
+    <!-- carousel end -->
+
+    <!-- Modal Start -->
+    <div
+      class="modal fade"
+      id="mymodal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Pesan Tiket</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="namaPemesan" class="col-form-label"
+                  >Nama Pemesan:</label
+                >
+                <input type="text" class="pemesan form-control" id="pemesan" />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >Harga Satuan Tiket: (Rp.)</label
+                >
+                <input
+                  type="text"
+                  class="hargaTiket form-control"
+                  id="hargaTiket"
+                  disabled
+                />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >Jumlah Tiket:</label
+                >
+                <input
+                  type="number"
+                  class="jumlahTiket form-control"
+                  id="jumlahTiket"
+                  oninput="totalHarga()"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >Total Harga Tiket: (Rp.)</label
+                >
+                <input
+                  type="number"
+                  class="totalHargaTiket form-control"
+                  id="totalHargaTiket"
+                  readonly
+                />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >Tanggal:</label
+                >
+                <input type="date" class="tiket form-control" id="tanggal" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              onclick="hapus()"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button type="button" class="btn btn-primary">Pesan Tiket</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal End -->
+
+    <section class="page-section bg-light">
+      <div class="text-center">
+        <!-- nama destinasi -->
+        <h2 class="section-heading text-uppercase">
+          {{ destinasi_info.namaDestinasi }}
+        </h2>
+        <br />
+        <h3 class="section-subheading text-muted mr-4 ml-4">
+          “Jogja terbuat dari rindu pulang dan angkringan.”
+        </h3>
+      </div>
+    </section>
+
+    <section>
+      <div class="container myarticle">
+        <!-- gambar artikel -->
+        <img
+          class="article-img"
+          style="border-radius: 15px; max-height: 18rem"
+          src="../static/img/detail_destinasi/gambarArtikel.jpg"
+          alt=""
+        />
+        <!-- paragraf artikel -->
+        <p>
+          Yogyakarta, sering disingkat sebagai Jogja, merupakan salah satu
+          destinasi wisata paling populer di Indonesia. Terletak di Pulau Jawa,
+          kota ini kaya akan warisan budaya, sejarah, seni, dan alam yang
+          memikat. Yogyakarta menyajikan pengalaman wisata yang unik dengan
+          kombinasi kekayaan budaya, sejarah yang dalam, seni tradisional,
+          kuliner lezat, dan keindahan alam yang menakjubkan. Ini membuatnya
+          menjadi destinasi yang sangat menarik bagi para wisatawan. Dengan
+          kekayaan budaya yang mendalam, keindahan alam yang menakjubkan, dan
+          keramahan penduduk setempat, Yogyakarta tidak hanya menjadi tempat
+          untuk mengeksplorasi sejarah dan seni, tetapi juga untuk merasakan
+          kehangatan dan keindahan Indonesia secara keseluruhan. Destinasi
+          wisata ini tidak hanya memuaskan hasrat para penggemar budaya dan
+          sejarah, tetapi juga menyajikan pengalaman yang tak terlupakan bagi
+          semua jenis wisatawan.
+        </p>
+      </div>
+      <div class="container myarticle">
+        <!-- judul attraction 1 -->
+        <h1><span id="attraction1"></span>{{ destinasi_info.namaAttr1 }}</h1>
+        <!-- gambar attraction 1 -->
+        <img
+          class="mt-1"
+          style="border-radius: 20px"
+          src="../static/img/detail_destinasi/gambarAttraction1.jpeg"
+          alt=""
+        />
+        <div class="row flex-column flex-md-row justify-content-between">
+          <!-- Kolom Kiri -->
+          <!-- deskripsi attraction 1 -->
+          <div class="col-md-8 column">
+            <p class="parag">
+              Jalan Malioboro adalah jantung pusat kota Yogyakarta dan merupakan
+              destinasi wisata yang sangat terkenal di Indonesia. Jalan ini
+              tidak hanya menjadi pusat perbelanjaan, tetapi juga merangkul
+              kekayaan budaya dan sejarah kota. Di sepanjang Jalan Malioboro,
+              Anda akan menemukan beragam toko tradisional, pedagang kaki lima,
+              dan penjual khas Jogja yang menawarkan berbagai barang kerajinan
+              tangan, batik, pakaian, dan suvenir. Selain belanja, Jalan
+              Malioboro juga dikenal sebagai tempat untuk menikmati kuliner khas
+              Yogyakarta. Warung dan pedagang makanan khas Jogja tersebar di
+              sepanjang jalan, menawarkan pengalaman kuliner yang autentik,
+              seperti gudeg, bakmi, dan makanan khas lainnya.
+            </p>
+          </div>
+
+          <!-- Kolom Kanan -->
+          <div class="col-md-4 column mt-2">
+            <div
+              id="carouselExampleAutoplaying"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Cindi Lucky | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Rifqi Khawariz | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <a style="color: #ffc800" href="#">Pesan Tiket >></a>
+      </div>
+      <br />
+      <div class="container myarticle">
+        <!-- judul attraction 2 -->
+        <h1><span id="attraction2"></span>{{ destinasi_info.namaAttr2 }}</h1>
+        <!-- gambar attraction 2 -->
+        <img
+          class="mt-1"
+          style="border-radius: 20px"
+          src="../static/img/detail_destinasi/gambarAttraction2.jpg"
+          alt=""
+        />
+        <div class="row flex-column flex-md-row justify-content-between">
+          <!-- Kolom Kiri -->
+          <!-- deskripsi attraction 2 -->
+          <div class="col-md-8 column">
+            <p class="parag">
+              Candi Prambanan adalah salah satu situs warisan budaya dunia yang
+              terletak di Yogyakarta, Indonesia. dikelilingi oleh taman yang
+              hijau dan pohon-pohon yang memberikan suasana yang sejuk dan
+              damai. Keindahan alam sekitar membuat pengalaman berkunjung
+              semakin menyenangkan. Ini adalah kompleks candi Hindu terbesar di
+              Indonesia dan dianggap sebagai salah satu destinasi wisata yang
+              paling menarik untuk dikunjungi. Candi Prambanan tidak hanya
+              menawarkan keindahan arsitektur kuno, tetapi juga memperkaya
+              pengalaman wisatawan dengan budaya, sejarah, dan kespiritualan.
+              Keunikan dan keindahan situs ini menjadikannya destinasi wisata
+              yang sangat menarik di Indonesia.
+            </p>
+          </div>
+
+          <!-- Kolom Kanan -->
+          <div class="col-md-4 column mt-2">
+            <div
+              id="carouselExampleAutoplaying"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Cindi Lucky | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Rifqi Khawariz | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <a style="color: #ffc800" href="#">Pesan Tiket >></a>
+      </div>
+      <br />
+      <div class="container myarticle">
+        <!-- judul attraction 3 -->
+        <h1><span id="attraction3"></span>{{ destinasi_info.namaAttr3 }}</h1>
+        <!-- gambar attraction 3 -->
+        <img
+          class="mt-1"
+          style="border-radius: 20px"
+          src="../static/img/detail_destinasi/gambarAttraction3.jpg"
+          alt=""
+        />
+        <div class="row flex-column flex-md-row justify-content-between">
+          <!-- Kolom Kiri -->
+          <div class="col-md-8 column">
+            <!-- deskripsi attraction 3 -->
+            <p class="parag">
+              Pantai Parangtritis adalah salah satu destinasi wisata yang
+              terkenal di Yogyakarta, Indonesia. Berlokasi sekitar 27 kilometer
+              selatan Yogyakarta, mempesona pengunjung dengan keindahan alamnya
+              yang memukau. Pantai ini memiliki garis pantai yang panjang dengan
+              pasir putih yang lembut dan ombak Samudera Hindia yang memukau.
+              Pemandangan matahari terbenam di atas laut di sini juga terkenal
+              sebagai salah satu yang terbaik di Yogyakarta. Pantai Parangtritis
+              menawarkan kombinasi indah antara panorama laut yang menakjubkan,
+              pasir pantai yang luas, dan nuansa mistis yang kental. Pantai
+              Parangtritis menyajikan pengalaman wisata yang lengkap dengan
+              kombinasi keindahan alam, nilai budaya, dan kegiatan rekreasi.
+              Destinasi ini menarik wisatawan lokal maupun internasional yang
+              ingin mengeksplorasi kekayaan alam dan budaya Indonesia.
+            </p>
+          </div>
+
+          <!-- Kolom Kanan -->
+          <div class="col-md-4 column mt-2">
+            <div
+              id="carouselExampleAutoplaying"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Cindi Lucky | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div
+                    class="card ms-2"
+                    style="height: 10rem; max-width: 21rem; overflow: hidden"
+                  >
+                    <div class="card-body bg-body-secondary">
+                      <p class="card-text text-body-secondary pt-2">
+                        "Some quick example text to build on the card title and
+                        make up the bulk of the card's content."
+                      </p>
+                      <p>Rifqi Khawariz | ⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <a style="color: #ffc800" href="#">Pesan Tiket >></a>
+      </div>
+    </section>
+    <hr />
+
+    {% include 'footerUser.html' %}
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS js -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <!-- Core theme JS-->
+    <script src="../static/js/scripts.js"></script>
+    <script>
+      const myModal = document.querySelector("#mymodal");
+      myModal.addEventListener("show.bs.modal", function (event) {
+        const button = event.relatedTarget;
+
+        const attraction = button.getAttribute("data-bs-attraction");
+        const pemesan = button.getAttribute("data-bs-pemesan");
+        const hargaTiket = button.getAttribute("data-bs-hargaTiket");
+
+        myModal.querySelector(
+          ".modal-title"
+        ).textContent = `Pesan Tiket ${attraction}`;
+        const inputPemesan = myModal.querySelector(".modal-body .pemesan");
+        inputPemesan.value = pemesan;
+        const inputHargaTiket = myModal.querySelector(
+          ".modal-body .hargaTiket"
+        );
+        inputHargaTiket.value = hargaTiket;
+        // const inputJumlahTiket = myModal.querySelector(".modal-body .jumlahTiket");
+        // const hitungHargaTiket = hargaTiket * inputJumlahTiket;
+        // totalHargaTiket.value = hitungHargaTiket;
+      });
+    </script>
+  </body>
+</html>

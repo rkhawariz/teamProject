@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Wonder | Admin Profile</title>
+
+    <!-- Bootstrap CSS and Font Awesome Icons -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="path/to/profile-image.jpg" class="card-img-top rounded-circle mx-auto mt-3" alt="Profile Image" style="width: 100px;">
+                    <div class="card-body text-center">
+                        <!-- Edit Button -->
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit Profile</button>
+                        <!-- Profile Info -->
+                        <div class="mb-3  mt-3">
+                            <label for="editUserName">Username</label>
+                            <input type="text" class="form-control" id="editUserName" value="admin@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" value="admin@example.com" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" value="********" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Admin Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form for Editing -->
+                    <form>
+                        <div class="mb-3">
+                            <label for="editUserName">Username</label>
+                            <input type="text" class="form-control" id="editUserName" value="admin@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail">Email</label>
+                            <input type="email" class="form-control" id="editEmail" value="admin@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword">New Password</label>
+                            <input type="password" class="form-control" id="editPassword" placeholder="New Password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProfileImage">New Profile Image</label>
+                            <input type="file" class="form-control-file" id="editProfileImage">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveChanges()">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveChanges() {
+            // Add logic to save changes (simulated for this example)
+            var newEmail = document.getElementById('editEmail').value;
+            var newPassword = document.getElementById('editPassword').value;
+            var newProfileImage = document.getElementById('editProfileImage').value;
+
+            // Update the displayed data
+            document.getElementById('email').value = newEmail;
+            document.getElementById('password').value = newPassword ? "********" : document.getElementById('password').value;
+            // Update the image source (simulated)
+            document.querySelector('.card img').src = newProfileImage ? 'path/to/new-image.jpg' : 'path/to/profile-image.jpg';
+        }
+    </script>
+
+</body>
+</html>
