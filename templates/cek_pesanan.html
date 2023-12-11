@@ -73,7 +73,7 @@
         }
 
         #mainNav {
-            background-image:url(../static/img/background-navbar.png);
+            background-image: url(../static/img/background-navbar.png);
         }
     </style>
 </head>
@@ -125,7 +125,8 @@
                         </li>
                         <!-- {% else %} -->
                         <li>
-                            <a class="dropdown-item" href="/cek_pesanan"><i class="fas fa-ticket fa-sm fa-fw mr-2"></i>Cek
+                            <a class="dropdown-item" href="/cek_pesanan"><i
+                                    class="fas fa-ticket fa-sm fa-fw mr-2"></i>Cek
                                 Pesanan</a>
                         </li>
                         <!-- {% endif %} -->
@@ -169,9 +170,9 @@
                                 <th scope="col">NO</th>
                                 <th scope="col">Nama Destinasi</th>
                                 <th scope="col">Jumlah Tiket</th>
-                                <th scope="col">Harga</th>
+                                <th scope="col">Harga Satuan</th>
                                 <th scope="col">Total Harga</th>
-                                <th scope="col">Upload</th>
+                                <th scope="col">Upload Bukti Pembayaran</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">E-Ticket</th>
                                 <th scope="col"></th>
@@ -183,9 +184,13 @@
                                 <td>Pulau Komodo</td>
                                 <td>5</td>
                                 <td>RP. 25.000</td>
+                                <td>RP. 125.000</td>
                                 <td><input type="file" /></td>
                                 <td>Confirmed</td>
-                                <td><a href="link_e_ticket">Download PDF</a></td>
+                                <td>
+                                    <a href="link_e_ticket" class="btn btn-warning"
+                                        style="text-decoration: none; color: white;">Download PDF</a>
+                                </td>
                                 <td><button type="submit" class="btn btn-primary">Submit</button></td>
                             </tr>
                             <tr>
@@ -193,9 +198,13 @@
                                 <td>Istano Basa Pagaruyung</td>
                                 <td>3</td>
                                 <td>RP. 75.000</td>
+                                <td>RP. 225.000</td>
                                 <td><input type="file" /></td>
                                 <td>Pending</td>
-                                <td><a href="link_e_ticket">Download PDF</a></td>
+                                <td>
+                                    <a href="link_e_ticket" class="btn btn-warning"
+                                        style="text-decoration: none; color: white;">Download PDF</a>
+                                </td>
                                 <td><button type="submit" class="btn btn-primary">Submit</button></td>
                             </tr>
                             <tr>
@@ -203,9 +212,13 @@
                                 <td>Museum Kereta Api Ambarawa</td>
                                 <td>3</td>
                                 <td>RP. 60.000</td>
+                                <td>RP. 180.000</td>
                                 <td><input type="file" /></td>
                                 <td>Pending</td>
-                                <td><a href="link_e_ticket">Download PDF</a></td>
+                                <td>
+                                    <a href="link_e_ticket" class="btn btn-warning"
+                                        style="text-decoration: none; color: white;">Download PDF</a>
+                                </td>
                                 <td><button type="submit" class="btn btn-primary">Submit</button></td>
                             </tr>
                         </tbody>
