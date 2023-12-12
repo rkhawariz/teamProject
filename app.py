@@ -148,7 +148,11 @@ def add_destinasi():
     data = request.form
     
     nama_destinasi = data['namaDestinasi']
-    
+    card_destinasi = request.files['gambarCardDestinasi']
+    extension_card = card_destinasi.filename.split('.')[-1]
+    file_name_card = f'static/card/gambarCard-{nama_destinasi}.{extension_card}'
+    card_destinasi.save(file_name_card)
+  
     judul_attraction1 = data['judulAttraction1']
     subtitle_attraction1 = data['subtitleAttraction1']
     harga_attraction1 = int(data['hargaAttraction1'])
@@ -186,6 +190,7 @@ def add_destinasi():
 
     destinasi_data = {
         'nama_destinasi': nama_destinasi,
+        'card_destinasi': file_name_card,
         'attractions' : {
           'attraction1': {
             'judul': judul_attraction1,
@@ -260,14 +265,37 @@ def detail_destinasi(title):
     'name': "Rifqi Khawarij"
   }
   destinasi_info = {
-    'namaDestinasi': "Yogyakarta",
-    'namaAttr1': "Malioboro",
-    'namaAttr2': "Candi Prambanan",
-    'namaAttr3': "Pantai Parangtritis",
-    'hargaTiketAttr1': 25000,
-    'hargaTiketAttr2': 70000,
-    'hargaTiketAttr3': 50000,
+    "nama_destinasi": "Banda Neira",
+    "card_destinasi": "static/card/gambarCard-Yogyakarta.jpg",
+    "attractions":{
+     "attraction1":{
+        "judul": "Pantai",
+        "subtitle": "pantai di banda",
+        "harga": {"$numberInt":"50000"},
+        "gambar": "static/attraction/gambar-Pantai.png",
+        "deskripsi_attraction1": "pantai ini ada di banda"
+     },
+     "attraction2":{
+        "judul": "gunung",
+        "subtitle": "gunung di banda",
+        "harga": {"$numberInt":"35000"},
+        "gambar": "static/attraction/gambar-gunung.png",
+        "deskripsi_attraction2": "gunung ini ada di banda"
+     },
+     "attraction3":{
+        "judul":"hutan",
+        "subtitle":"hutan di banda",
+        "harga":{"$numberInt":"1000"},
+        "gambar":"static/attraction/gambar-hutan.png",
+        "deskripsi_attraction3":"hutan ini ada di banda"
+     }
+    },
+    "quotes":"the defitions of banda neira",
+    "gambar_artikel":"static/artikel/gambar-Banda Neira.png",
+    "deskripsi_artikel":"banda neira suatu tempat di banda",
+    "tanggal_tambah":"2023-12-13 03:15:26"
   }
+  
   logged_in = True
   is_admin = False
   return render_template('detail_destinasi.html', user_info=user_info, destinasi_info=destinasi_info, logged_in=logged_in, is_admin=is_admin)

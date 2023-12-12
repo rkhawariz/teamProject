@@ -229,29 +229,29 @@
     <section id="home" class="mycontainer">
       <div id="slide">
         <div class="overlay"></div>
+        {% for key, attraction in destinasi_info.attractions.items() %}
+          {% if key == "attraction1" %}
         <div
           class="item"
           style="
-            background-image: url(../static/img/detail_destinasi/gambarAttraction1.jpeg);
+            background-image: url(../{{ attraction.gambar }});
           "
         >
           <div class="content">
             <!-- judul attraction 1 -->
-            <div class="attr-title">{{ destinasi_info.namaAttr1 }}</div>
+            <div class="attr-title">{{ attraction.judul }}</div>
             <!-- subjudul attraction 1 -->
             <div class="des">
-              Jantung pusat kota Yogyakarta, tidak hanya menjadi pusat
-              perbelanjaan, tetapi juga merangkul kekayaan budaya dan sejarah
-              kota.
+              {{ attraction.subtitle }}
             </div>
             <div class="tombol-container">
               <button
                 class="btn btn-light mb-2"
                 data-bs-toggle="modal"
                 data-bs-target="#mymodal"
-                data-bs-attraction="{{ destinasi_info.namaAttr1 }}"
+                data-bs-attraction="{{ attraction.judul }}"
                 data-bs-pemesan="{{ user_info.name }}"
-                data-bs-hargaTiket="{{ destinasi_info.hargaTiketAttr1 }}"
+                data-bs-hargaTiket="{{ attraction.harga }}"
               >
                 Pesan Tiket
               </button>
@@ -261,6 +261,8 @@
             </div>
           </div>
         </div>
+                {% endif %}
+            {% endfor %}
         <div
           class="item"
           style="
@@ -429,7 +431,7 @@
       <div class="text-center">
         <!-- nama destinasi -->
         <h2 class="section-heading text-uppercase">
-          {{ destinasi_info.namaDestinasi }}
+          {{ destinasi_info.nama_destinasi }}
         </h2>
         <br />
         <h3 class="section-subheading text-muted mr-4 ml-4">
