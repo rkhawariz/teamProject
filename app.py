@@ -30,12 +30,23 @@ TOKEN_KEY = 'mytoken'
 
 @app.route('/', methods= ['GET'])
 def home():
-  user_info = {
-    'name': "Cindi Widiawati"
-  }
-  logged_in = True
-  is_admin = False
-  return render_template('index.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+  token_receive = request.cookies.get(TOKEN_KEY)
+  try:
+      payload =jwt.decode(
+          token_receive,
+          SECRET_KEY,
+          algorithms=['HS256']
+      )
+      user_info = db.user.find_one({"email": payload["id"]})
+      is_admin = user_info.get("role") == "admin"
+      logged_in = True
+      print(user_info)
+      return render_template('index.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+  except jwt.ExpiredSignatureError:
+      msg = 'Your token has expired'
+  except jwt.exceptions.DecodeError:
+      msg = 'There was a problem logging you in'
+  return render_template('index.html', msg=msg)
 
 @app.route('/login')
 def login():
@@ -47,15 +58,33 @@ def login_user():
         data = request.json
         email = data.get('email')
         password = data.get('password')
-
-        user = db.user.find_one({'email': email})
-
-        if user and user['password'] == hashlib.sha256(password.encode('utf-8')).hexdigest():
-            # Jika autentikasi berhasil
-            return jsonify({'success': True, 'message': 'Login successful!'})
-        else:
-            # Jika autentikasi gagal
-            return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
+        pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+        
+        result = db.user.find_one(
+          {
+           'email': email,
+           'password': pw_hash
+           }
+        )
+        if result:
+            payload = {
+                "id": email,
+                "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 48)
+            }
+            token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        return jsonify(
+            {
+                "success": True,
+                'message': 'Login successful!',
+                "token": token
+            }
+        )
+    else:
+      return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
+          
+@app.route('/sign-up', methods=['GET'])
+def get_register():
+  return render_template('register.html')
 
 @app.route('/sign-up', methods=['POST'])
 def register():
@@ -96,7 +125,23 @@ def register():
   
 @app.route('/destinasi', methods=['GET'])
 def destinations():
-    return render_template('destinations.html')
+  token_receive = request.cookies.get(TOKEN_KEY)
+  try:
+      payload =jwt.decode(
+          token_receive,
+          SECRET_KEY,
+          algorithms=['HS256']
+      )
+      user_info = db.user.find_one({"email": payload["id"]})
+      is_admin = user_info.get("role") == "admin"
+      logged_in = True
+      print(user_info)
+      return render_template('destinations.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+  except jwt.ExpiredSignatureError:
+      msg = 'Your token has expired'
+  except jwt.exceptions.DecodeError:
+      msg = 'There was a problem logging you in'
+  return render_template('destinations.html', msg=msg)
 
 @app.route('/add_destinasi', methods=['GET','POST'])
 def add_destinasi():
@@ -224,7 +269,23 @@ def pesantiket():
 
 @app.route('/about', methods=['GET'])
 def about():
-  return render_template('about.html')
+  token_receive = request.cookies.get(TOKEN_KEY)
+  try:
+      payload =jwt.decode(
+          token_receive,
+          SECRET_KEY,
+          algorithms=['HS256']
+      )
+      user_info = db.user.find_one({"email": payload["id"]})
+      is_admin = user_info.get("role") == "admin"
+      logged_in = True
+      print(user_info)
+      return render_template('about.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+  except jwt.ExpiredSignatureError:
+      msg = 'Your token has expired'
+  except jwt.exceptions.DecodeError:
+      msg = 'There was a problem logging you in'
+  return render_template('about.html', msg=msg)
   
 @app.route('/cek_pesanan')
 def cek_pesanan():

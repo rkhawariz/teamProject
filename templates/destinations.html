@@ -41,6 +41,10 @@
     <!-- AOS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
     <link href="../static/css/mystyle.css" rel="stylesheet" />
 
     <style>
@@ -117,7 +121,7 @@
               aria-expanded="false"
             >
               <span class="mr-2 d-none d-lg-inline small"
-                >{{ user_info.name }}</span
+                >{{ user_info.nama }}</span
               >
               <img
                 class="img-profile rounded-circle"
@@ -150,7 +154,7 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <a class="dropdown-item" href="#"
+                <a class="dropdown-item" onclick="sign_out()"
                   ><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
                   Logout</a
                 >

@@ -70,3 +70,9 @@ function prev() {
   $("#slide").prepend(lists[lists.length - 1]);
   
 };
+
+function sign_out() {
+  $.removeCookie("mytoken", { path: "/" });
+  alert("Signed out!");
+  window.location.href = "/";
+}
