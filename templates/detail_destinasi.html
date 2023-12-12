@@ -67,17 +67,58 @@
 
     <script>
       function totalHarga() {
-        let hargaTiket = document.getElementById("hargaTiket").value;
-        let jumlahTiket = document.getElementById("jumlahTiket").value;
+        let hargaTiket = $("#hargaTiket").val();
+        let jumlahTiket = $("#jumlahTiket").val();
 
         let hasilPerkalian = hargaTiket * jumlahTiket;
 
-        document.getElementById("totalHargaTiket").value = hasilPerkalian;
+        $("#totalHargaTiket").val(hasilPerkalian);
       }
 
       function hapus() {
-        $('.jumlahTiket').val("");
-        $('.totalHargaTiket').val("");
+        $(".jumlahTiket").val("");
+        $(".totalHargaTiket").val("");
+      }
+
+      function listingUlasan() {
+        $.ajax({
+          type: "GET",
+          url: "/getulasan",
+          data: {},
+          success: function (response) {
+            let ulasan = response["ulasan"];
+            console.log(ulasan);
+            $("#cardsUlasan").empty();
+            if (ulasan.length === 0) {
+              let temp_html = `<div class="card ms-2 me-2" style="min-height: 10rem; width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    Belum ada ulasan
+                  </p>
+                </div>
+              </div>
+              `;
+              $("#cardsUlasan").append(temp_html);
+            } else {
+              $("#cardsUlasan").empty();
+              for (let i = 0; i < destinations.length; i++) {
+                let ulasan = destinations[i]["ulasan"];
+                let pengguna = destinations[i]["pengguna"];
+                let rating = destinations[i]["rating"];
+                let temp_html = `<div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "${ulasan}"
+                  </p>
+                  <p>${pengguna} | ${rating}</p>
+                </div>
+              </div>
+              `;
+                $("#cardsUlasan").append(temp_html);
+              }
+            }
+          },
+        });
       }
     </script>
   </head>
@@ -311,12 +352,18 @@
             ></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form method="POST" action="/pesantiket">
+              <div class="mb-3">
+                <label for="attractionGive" class="col-form-label"
+                  >Nama Attraction:</label
+                >
+                <input type="text" class="attractionGive form-control" id="attractionGive" name="attractionGive" readonly/>
+              </div>
               <div class="mb-3">
                 <label for="namaPemesan" class="col-form-label"
                   >Nama Pemesan:</label
                 >
-                <input type="text" class="pemesan form-control" id="pemesan" />
+                <input type="text" class="pemesan form-control" id="pemesan" name="namaPemesan" />
               </div>
               <div class="mb-3">
                 <label for="message-text" class="col-form-label"
@@ -326,7 +373,8 @@
                   type="text"
                   class="hargaTiket form-control"
                   id="hargaTiket"
-                  disabled
+                  name="hargaTiket"
+                  readonly
                 />
               </div>
               <div class="mb-3">
@@ -337,6 +385,7 @@
                   type="number"
                   class="jumlahTiket form-control"
                   id="jumlahTiket"
+                  name="jumlahTiket"
                   oninput="totalHarga()"
                 />
               </div>
@@ -348,6 +397,7 @@
                   type="number"
                   class="totalHargaTiket form-control"
                   id="totalHargaTiket"
+                  name="totalHargaTiket"
                   readonly
                 />
               </div>
@@ -355,20 +405,20 @@
                 <label for="message-text" class="col-form-label"
                   >Tanggal:</label
                 >
-                <input type="date" class="tiket form-control" id="tanggal" />
+                <input type="date" class="tiket form-control" id="tanggal" name="tanggal" />
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  onclick="hapus()"
+                  class="btn btn-danger"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+                <button type="submit" class="btn btn-primary">Pesan Tiket</button>
               </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              onclick="hapus()"
-              class="btn btn-danger"
-              data-bs-dismiss="modal"
-            >
-              Batal
-            </button>
-            <button type="button" class="btn btn-primary">Pesan Tiket</button>
           </div>
         </div>
       </div>
@@ -446,79 +496,17 @@
 
           <!-- Kolom Kanan -->
           <div class="col-md-4 column mt-2">
-            <div
-              id="carouselExampleAutoplaying"
-              class="carousel slide"
-              data-bs-ride="carousel"
-            >
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Trio | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Cindi Lucky | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Rifqi Khawariz | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
+            <div id="cardsUlasan" style="overflow-x: scroll; display: flex">
+              <div
+                class="card ms-2 me-2"
+                style="min-height: 10rem; width: 20rem; flex-shrink: 0"
+              >
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    Belum ada ulasan
+                  </p>
                 </div>
               </div>
-              <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Next</span>
-              </button>
             </div>
           </div>
         </div>
@@ -556,79 +544,34 @@
 
           <!-- Kolom Kanan -->
           <div class="col-md-4 column mt-2">
-            <div
-              id="carouselExampleAutoplaying"
-              class="carousel slide"
-              data-bs-ride="carousel"
-            >
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Trio | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Cindi Lucky | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Rifqi Khawariz | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
+            <div id="cardsUlasan" style="overflow-x: scroll; display: flex">
+              <div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "Some quick example text to build on the card title and make
+                    up the bulk of the card's content."
+                  </p>
+                  <p>Trio | ⭐️⭐️⭐️⭐️</p>
                 </div>
               </div>
-              <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Next</span>
-              </button>
+              <div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "Some quick example text to build on the card title and make
+                    up the bulk of the card's content."
+                  </p>
+                  <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                </div>
+              </div>
+              <div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "Some quick example text to build on the card title and make
+                    up the bulk of the card's content."
+                  </p>
+                  <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -668,79 +611,34 @@
 
           <!-- Kolom Kanan -->
           <div class="col-md-4 column mt-2">
-            <div
-              id="carouselExampleAutoplaying"
-              class="carousel slide"
-              data-bs-ride="carousel"
-            >
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Trio | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Cindi Lucky | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div
-                    class="card ms-2"
-                    style="height: 10rem; max-width: 21rem; overflow: hidden"
-                  >
-                    <div class="card-body bg-body-secondary">
-                      <p class="card-text text-body-secondary pt-2">
-                        "Some quick example text to build on the card title and
-                        make up the bulk of the card's content."
-                      </p>
-                      <p>Rifqi Khawariz | ⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
+            <div id="cardsUlasan" style="overflow-x: scroll; display: flex">
+              <div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "Some quick example text to build on the card title and make
+                    up the bulk of the card's content."
+                  </p>
+                  <p>Trio | ⭐️⭐️⭐️⭐️</p>
                 </div>
               </div>
-              <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Next</span>
-              </button>
+              <div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "Some quick example text to build on the card title and make
+                    up the bulk of the card's content."
+                  </p>
+                  <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                </div>
+              </div>
+              <div class="card ms-2 me-2" style="width: 20rem; flex-shrink: 0">
+                <div class="card-body bg-body-secondary">
+                  <p class="card-text text-body-secondary pt-2">
+                    "Some quick example text to build on the card title and make
+                    up the bulk of the card's content."
+                  </p>
+                  <p>Trio | ⭐️⭐️⭐️⭐️</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -779,7 +677,9 @@
         const inputHargaTiket = myModal.querySelector(
           ".modal-body .hargaTiket"
         );
+        const inputAttraction = myModal.querySelector(".modal-body .attractionGive");
         inputHargaTiket.value = hargaTiket;
+        inputAttraction.value = attraction;
         // const inputJumlahTiket = myModal.querySelector(".modal-body .jumlahTiket");
         // const hitungHargaTiket = hargaTiket * inputJumlahTiket;
         // totalHargaTiket.value = hitungHargaTiket;

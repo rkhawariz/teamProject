@@ -22,8 +22,8 @@ load_dotenv(dotenv_path)
 MONGODB_URI = os.environ.get("MONGODB_URI")
 DB_NAME =  os.environ.get("DB_NAME")
 
-# client = MongoClient(MONGODB_URI)
-# db = client[DB_NAME]
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
 
 TOKEN_KEY = 'mytoken'
 
@@ -66,6 +66,28 @@ def detail_destinasi(title):
   is_admin = False
   return render_template('detail_destinasi.html', user_info=user_info, destinasi_info=destinasi_info, logged_in=logged_in, is_admin=is_admin)
   
+@app.route('/pesantiket', methods=['POST'])
+def pesantiket():
+    namaAttraction = request.form['attractionGive']
+    namaPemesan = request.form['namaPemesan']
+    hargaTiket = request.form['hargaTiket']
+    jumlahTiket = request.form['jumlahTiket']
+    totalHargaTiket = request.form['totalHargaTiket']
+    tanggal = request.form['tanggal']
+    doc = {
+      "namaAttraction" : namaAttraction,
+      "namaPemesan" : namaPemesan,
+      "hargaTiket" : hargaTiket,
+      "jumlahTiket" : jumlahTiket,
+      "totalHargaTiket" : totalHargaTiket,
+      "tanggal" : tanggal,
+      "status": "pending",
+      "buktiPembayaran": "",
+      "e-ticket": "",
+    }
+    db.tiket.insert_one(doc)
+    return render_template('cek_pesanan.html')
+
 @app.route('/about', methods=['GET'])
 def about():
   return render_template('about.html')
