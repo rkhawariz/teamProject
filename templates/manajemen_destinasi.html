@@ -8,6 +8,10 @@
     <link rel="icon" type="image/x-icon" href="../static/img/myservices/logo.png" />
     <title>Trip Wonder | Manajemen Destinasi</title>
 
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
     <style>
         /* Style untuk modal content */
         .modal-content {
@@ -157,19 +161,6 @@
                 });
             }
         });
-
-        function simpanDestinasi() {
-            let simpanData = false;
-
-            if (simpanData) {
-                // Jika penyimpanan berhasil
-                alert('Destinasi berhasil disimpan.');
-                location.reload(); // Muat ulang halaman setelah alert ditutup
-            } else {
-                // Jika penyimpanan gagal
-                alert('Terjadi kesalahan saat menyimpan destinasi.');
-            }
-        }
     </script>
 </head>
 
@@ -199,115 +190,130 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Form Destinasi</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Tambah Destinasi</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body p-4">
-                                    <form enctype="multipart/form-data">
+                                    <form enctype="multipart/form-data" method="POST" action="/add_destinasi">
                                         <!-- Nama Destinasi -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="namaDestinasi" class="form-control" />
+                                            <input type="text" id="namaDestinasi" class="form-control" name="namaDestinasi"/>
                                             <label class="form-label" for="namaDestinasi">Nama Destinasi</label>
                                         </div>
 
                                         <!-- Stok Tiket -->
                                         <div class="form-outline mb-4">
-                                            <input type="number" id="stokTiket" class="form-control" />
+                                            <input type="number" id="stokTiket" class="form-control" name="stokTiket"/>
                                             <label class="form-label" for="stokTiket">Stok Tiket</label>
-                                        </div>
-
-                                        <!-- Harga Satuan -->
-                                        <div class="form-outline mb-4">
-                                            <input type="number" id="hargaSatuan" class="form-control" />
-                                            <label class="form-label" for="hargaSatuan">Harga Satuan</label>
                                         </div>
 
                                         <!-- Judul Attraction 1 -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="judulAttraction1" class="form-control" />
+                                            <input type="text" id="judulAttraction1" class="form-control" name="judulAttraction1"/>
                                             <label class="form-label" for="judulAttraction1">Judul Attraction
                                                 1</label>
                                         </div>
 
                                         <!-- Subtitle Attraction 1 -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="subtitleAttraction1" class="form-control" />
+                                            <input type="text" id="subtitleAttraction1" class="form-control" name="subtitleAttraction1"/>
                                             <label class="form-label" for="subtitleAttraction1">Subtitle
+                                                Attraction 1</label>
+                                        </div>
+
+                                        <!-- Harga Atrraction 1 -->
+                                        <div class="form-outline mb-4">
+                                            <input type="number" id="hargaAttraction1" class="form-control" name="hargaAttraction1"/>
+                                            <label class="form-label" for="hargaAttraction1">Harga
                                                 Attraction 1</label>
                                         </div>
 
                                         <!-- Gambar Attraction 1 -->
                                         <div class="form-outline mb-4">
-                                            <input type="file" id="gambarAttraction1" class="form-control" />
+                                            <input type="file" id="gambarAttraction1" class="form-control" name="gambarAttraction1"/>
                                             <label class="form-label" for="gambarAttraction1">Unggah Gambar
                                                 Attraction 1</label>
                                         </div>
 
                                         <!-- Judul Attraction 2 -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="judulAttraction2" class="form-control" />
+                                            <input type="text" id="judulAttraction2" class="form-control" name="judulAttraction2"/>
                                             <label class="form-label" for="judulAttraction2">Judul Attraction
                                                 2</label>
                                         </div>
 
                                         <!-- Subtitle Attraction 2 -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="subtitleAttraction2" class="form-control" />
+                                            <input type="text" id="subtitleAttraction2" class="form-control" name="subtitleAttraction2"/>
                                             <label class="form-label" for="subtitleAttraction2">Subtitle
+                                                Attraction 2</label>
+                                        </div>
+
+                                        <!-- Harga Atrraction 2 -->
+                                        <div class="form-outline mb-4">
+                                            <input type="number" id="hargaAttraction2" class="form-control" name="hargaAttraction2/>
+                                            <label class="form-label" for="hargaAttraction2">Harga
                                                 Attraction 2</label>
                                         </div>
 
                                         <!-- Gambar Attraction 2 -->
                                         <div class="form-outline mb-4">
-                                            <input type="file" id="gambarAttraction2" class="form-control" />
+                                            <input type="file" id="gambarAttraction2" class="form-control" name="gambarAttraction2"/>
                                             <label class="form-label" for="gambarAttraction2">Unggah Gambar
                                                 Attraction 2</label>
                                         </div>
 
                                         <!-- Judul Attraction 3 -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="judulAttraction2" class="form-control" />
+                                            <input type="text" id="judulAttraction2" class="form-control" name="judulAttraction3"/>
                                             <label class="form-label" for="judulAttraction2">Judul Attraction
                                                 3</label>
                                         </div>
 
                                         <!-- Subtitle Attraction 3 -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="subtitleAttraction3" class="form-control" />
+                                            <input type="text" id="subtitleAttraction3" class="form-control" name="subtitleAttraction3"/>
                                             <label class="form-label" for="subtitleAttraction3">Subtitle
+                                                Attraction 3</label>
+                                        </div>
+
+                                        <!-- Harga Atrraction 3 -->
+                                        <div class="form-outline mb-4">
+                                            <input type="number" id="hargaAttraction3" class="form-control" name="hargaAttraction3"/>
+                                            <label class="form-label" for="hargaAttraction3">Harga
                                                 Attraction 3</label>
                                         </div>
 
                                         <!-- Gambar Attraction 3 -->
                                         <div class="form-outline mb-4">
-                                            <input type="file" id="gambarAttraction3" class="form-control" />
+                                            <input type="file" id="gambarAttraction3" class="form-control" name="gambarAttraction3"/>
                                             <label class="form-label" for="gambarAttraction3">Unggah Gambar
                                                 Attraction 3</label>
                                         </div>
 
                                         <!-- Nama Kota -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="namaKota" class="form-control" />
+                                            <input type="text" id="namaKota" class="form-control" name="namaKota"/>
                                             <label class="form-label" for="namaKota">Nama Kota</label>
                                         </div>
 
                                         <!-- Quotes -->
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="quotes" class="form-control" />
+                                            <input type="text" id="quotes" class="form-control" name="quotes"/>
                                             <label class="form-label" for="quotes">Quotes</label>
                                         </div>
 
                                         <!-- Gambar Artikel -->
                                         <div class="form-outline mb-4">
-                                            <input type="file" id="gambarArtikel" class="form-control" />
+                                            <input type="file" id="gambarArtikel" class="form-control" name="gambarArtikel/>
                                             <label class="form-label" for="gambarArtikel">Unggah Gambar
                                                 Artikel</label>
                                         </div>
 
                                         <!-- Deskripsi Artikel -->
                                         <div class="form-outline mb-4">
-                                            <textarea id="deskripsiArtikel" class="form-control" rows="4"></textarea>
+                                            <textarea id="deskripsiArtikel" class="form-control" rows="4" name="deskripsiArtikel"></textarea>
                                             <label class="form-label" for="deskripsiArtikel">Deskripsi
                                                 Artikel</label>
                                         </div>
@@ -315,7 +321,7 @@
                                         <!-- Deskripsi Attraction 1 -->
                                         <div class="form-outline mb-4">
                                             <textarea id="deskripsiAttraction1" class="form-control"
-                                                rows="4"></textarea>
+                                                rows="4" name="deskripsiAttraction1"></textarea>
                                             <label class="form-label" for="deskripsiAttraction1">Deskripsi
                                                 Attraction 1</label>
                                         </div>
@@ -323,7 +329,7 @@
                                         <!-- Deskripsi Attraction 2 -->
                                         <div class="form-outline mb-4">
                                             <textarea id="deskripsiAttraction2" class="form-control"
-                                                rows="4"></textarea>
+                                                rows="4" name="deskripsiAttraction2"></textarea>
                                             <label class="form-label" for="deskripsiAttraction2">Deskripsi
                                                 Attraction 2</label>
                                         </div>
@@ -331,7 +337,7 @@
                                         <!-- Deskripsi Attraction 3 -->
                                         <div class="form-outline mb-4">
                                             <textarea id="deskripsiAttraction3" class="form-control"
-                                                rows="4"></textarea>
+                                                rows="4" name="deskripsiAttraction3"></textarea>
                                             <label class="form-label" for="deskripsiAttraction3">Deskripsi
                                                 Attraction 3</label>
                                         </div>
@@ -467,7 +473,8 @@
     <div class="mt-5">
         {% include 'footer.html' %}
     </div>
-
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

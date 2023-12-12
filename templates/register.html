@@ -82,11 +82,13 @@
     <script>
         $(document).ready(function () {
             $('#signupButton').click(function () {
+                let nama = $('#nama').val();
                 let email = $('#email').val();
                 let password = $('#password').val();
                 let confirmPassword = $('#confirm_password').val();
 
                 let userData = {
+                    nama: nama,
                     email: email,
                     password: password,
                     confirm_password: confirmPassword
@@ -94,12 +96,12 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '/register',
-                    contentType: 'application/json',
+                    url: '/sign-up',
                     data: JSON.stringify(userData),
+                    contentType: 'application/json',
                     success: function (response) {
-                        if (response === 'Success') {
-                            // Tampilkan SweetAlert2
+                        if (response.status === 'Success') {
+                            // Use SweetAlert2 for success message
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -108,11 +110,11 @@
                                 confirmButtonText: 'OK'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href = '/';
+                                    window.location.href = '/login';
                                 }
                             });
                         } else {
-                            // Tampilkan SweetAlert2 untuk kegagalan
+                            // Use SweetAlert2 for error message
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
@@ -124,7 +126,7 @@
                     },
                     error: function (error) {
                         console.error('Error:', error);
-                        // Tampilkan SweetAlert2 untuk kesalahan
+                        // Use SweetAlert2 for error message
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -150,8 +152,8 @@
             <p class="bg-success" style="color: #f5f5f5; border-radius: 10px;">It's free and takes a minutes</p>
 
             <div class="input-group mb-3">
-                <input type="text" class="form-control form-control-lg bg-light fs-6" id="nama"
-                    placeholder="Your Name" name="nama">
+                <input type="text" class="form-control form-control-lg bg-light fs-6" id="nama" placeholder="Your Name"
+                    name="nama">
             </div>
             <div class="input-group mb-3">
                 <input type="text" class="form-control form-control-lg bg-light fs-6" id="email"

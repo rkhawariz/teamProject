@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from bson import ObjectId
 
 app = Flask(__name__)
 
@@ -42,11 +43,120 @@ def login():
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        try:
+            # Mengambil data dari permintaan POST
+            data = request.json
+            nama = data['nama']
+            email = data['email']
+            password = data['password']
+            confirm_password = data['confirm_password']
+            password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+            # Memastikan password dan konfirmasi password sesuai
+            if password == confirm_password:
+                user_count = db.user.count_documents({})
+                user_id = user_count + 1
+
+                user_data = {
+                    'id': user_id,
+                    'nama': nama,
+                    'email': email,
+                    'password': password_hash,
+                    'confirm_password': password_hash,
+                    'role': 'user',
+                    'foto_profile': '',
+                    'tanggal_register': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+
+                # Insert the user_data into the 'user' collection
+                db.user.insert_one(user_data)
+
+                return jsonify({'status': 'Success', 'message': 'Account created successfully'})
+            else:
+                return jsonify({'status': 'Error', 'message': 'Password and confirm password do not match'})
+        except Exception as e:
+            return jsonify({'status': 'Error', 'message': str(e)})
     return render_template('register.html')
   
 @app.route('/destinasi', methods=['GET'])
 def destinations():
     return render_template('destinations.html')
+
+@app.route('/add_destinasi', methods=['POST'])
+def add_destinasi():
+    try:
+        # Mengambil data dari permintaan POST
+        data = request.form
+        nama_destinasi = data['namaDestinasi']
+        stok_tiket = int(data['stokTiket'])
+        judul_attraction1 = data['judulAttraction1']
+        subtitle_attraction1 = data['subtitleAttraction1']
+        harga_attraction1 = int(data['hargaAttraction1'])
+        gambar_attraction1 = request.files['gambarAttraction1']  # Use request.files to get file data
+
+        judul_attraction2 = data['judulAttraction2']
+        subtitle_attraction2 = data['subtitleAttraction2']
+        harga_attraction2 = int(data['hargaAttraction2'])
+        gambar_attraction2 = request.files['gambarAttraction2']
+
+        judul_attraction3 = data['judulAttraction3']
+        subtitle_attraction3 = data['subtitleAttraction3']
+        harga_attraction3 = int(data['hargaAttraction3'])
+        gambar_attraction3 = request.files['gambarAttraction3']
+
+        nama_kota = data['namaKota']
+        quotes = data['quotes']
+        gambar_artikel = request.files['gambarArtikel']
+        deskripsi_artikel = data['deskripsiArtikel']
+
+        deskripsi_attraction1 = data['deskripsiAttraction1']
+        deskripsi_attraction2 = data['deskripsiAttraction2']
+        deskripsi_attraction3 = data['deskripsiAttraction3']
+
+        # Example: Save images to a specific folder
+        gambar_attraction1.save(f'./static/images/{gambar_attraction1.filename}')
+        gambar_attraction2.save(f'./static/images/{gambar_attraction2.filename}')
+        gambar_attraction3.save(f'./static/images/{gambar_attraction3.filename}')
+        gambar_artikel.save(f'./static/images/{gambar_artikel.filename}')
+
+        destinasi_data = {
+            'nama_destinasi': nama_destinasi,
+            'stok_tiket': stok_tiket,
+            'attraction1': {
+                'judul': judul_attraction1,
+                'subtitle': subtitle_attraction1,
+                'harga': harga_attraction1,
+                'gambar': gambar_attraction1.filename
+            },
+            'attraction2': {
+                'judul': judul_attraction2,
+                'subtitle': subtitle_attraction2,
+                'harga': harga_attraction2,
+                'gambar': gambar_attraction2.filename
+            },
+            'attraction3': {
+                'judul': judul_attraction3,
+                'subtitle': subtitle_attraction3,
+                'harga': harga_attraction3,
+                'gambar': gambar_attraction3.filename
+            },
+            'nama_kota': nama_kota,
+            'quotes': quotes,
+            'gambar_artikel': gambar_artikel.filename,
+            'deskripsi_artikel': deskripsi_artikel,
+            'deskripsi_attraction1': deskripsi_attraction1,
+            'deskripsi_attraction2': deskripsi_attraction2,
+            'deskripsi_attraction3': deskripsi_attraction3,
+            'tanggal_tambah': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        db.destinasi.insert_one(destinasi_data)
+
+        return jsonify({'status': 'Success', 'message': 'Destinasi added successfully'})
+    except Exception as e:
+        return jsonify({'status': 'Error', 'message': str(e)})
+    return render_template('manajemen_destinasi.html')
 
 @app.route('/detail_destinasi/<title>', methods=['GET'])
 def detail_destinasi(title):
