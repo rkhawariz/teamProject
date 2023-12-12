@@ -1,480 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../static/img/myservices/logo.png" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../static/img/myservices/logo.png"
+    />
     <title>Trip Wonder | Manajemen Destinasi</title>
 
     <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
 
     <style>
-        /* Style untuk modal content */
-        .modal-content {
-            background-color: #D3EE8B;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3CradialGradient id='a' gradientUnits='objectBoundingBox'%3E%3Cstop offset='0' stop-color='%23E2FBFF'/%3E%3Cstop offset='1' stop-color='%23D3EE8B'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='0' y1='750' x2='1550' y2='750'%3E%3Cstop offset='0' stop-color='%23dbf5c5'/%3E%3Cstop offset='1' stop-color='%23D3EE8B'/%3E%3C/linearGradient%3E%3Cpath id='s' fill='url(%23b)' d='M1549.2 51.6c-5.4 99.1-20.2 197.6-44.2 293.6c-24.1 96-57.4 189.4-99.3 278.6c-41.9 89.2-92.4 174.1-150.3 253.3c-58 79.2-123.4 152.6-195.1 219c-71.7 66.4-149.6 125.8-232.2 177.2c-82.7 51.4-170.1 94.7-260.7 129.1c-90.6 34.4-184.4 60-279.5 76.3C192.6 1495 96.1 1502 0 1500c96.1-2.1 191.8-13.3 285.4-33.6c93.6-20.2 185-49.5 272.5-87.2c87.6-37.7 171.3-83.8 249.6-137.3c78.4-53.5 151.5-114.5 217.9-181.7c66.5-67.2 126.4-140.7 178.6-218.9c52.3-78.3 96.9-161.4 133-247.9c36.1-86.5 63.8-176.2 82.6-267.6c18.8-91.4 28.6-184.4 29.6-277.4c0.3-27.6 23.2-48.7 50.8-48.4s49.5 21.8 49.2 49.5c0 0.7 0 1.3-0.1 2L1549.2 51.6z'/%3E%3Cg id='g'%3E%3Cuse href='%23s' transform='scale(0.12) rotate(60)'/%3E%3Cuse href='%23s' transform='scale(0.2) rotate(10)'/%3E%3Cuse href='%23s' transform='scale(0.25) rotate(40)'/%3E%3Cuse href='%23s' transform='scale(0.3) rotate(-20)'/%3E%3Cuse href='%23s' transform='scale(0.4) rotate(-30)'/%3E%3Cuse href='%23s' transform='scale(0.5) rotate(20)'/%3E%3Cuse href='%23s' transform='scale(0.6) rotate(60)'/%3E%3Cuse href='%23s' transform='scale(0.7) rotate(10)'/%3E%3Cuse href='%23s' transform='scale(0.835) rotate(-40)'/%3E%3Cuse href='%23s' transform='scale(0.9) rotate(40)'/%3E%3Cuse href='%23s' transform='scale(1.05) rotate(25)'/%3E%3Cuse href='%23s' transform='scale(1.2) rotate(8)'/%3E%3Cuse href='%23s' transform='scale(1.333) rotate(-60)'/%3E%3Cuse href='%23s' transform='scale(1.45) rotate(-30)'/%3E%3Cuse href='%23s' transform='scale(1.6) rotate(10)'/%3E%3C/g%3E%3C/defs%3E%3Cg transform='rotate(0 0 0)'%3E%3Cg transform='rotate(0 0 0)'%3E%3Ccircle fill='url(%23a)' r='3000'/%3E%3Cg opacity='0.5'%3E%3Ccircle fill='url(%23a)' r='2000'/%3E%3Ccircle fill='url(%23a)' r='1800'/%3E%3Ccircle fill='url(%23a)' r='1700'/%3E%3Ccircle fill='url(%23a)' r='1651'/%3E%3Ccircle fill='url(%23a)' r='1450'/%3E%3Ccircle fill='url(%23a)' r='1250'/%3E%3Ccircle fill='url(%23a)' r='1175'/%3E%3Ccircle fill='url(%23a)' r='900'/%3E%3Ccircle fill='url(%23a)' r='750'/%3E%3Ccircle fill='url(%23a)' r='500'/%3E%3Ccircle fill='url(%23a)' r='380'/%3E%3Ccircle fill='url(%23a)' r='250'/%3E%3C/g%3E%3Cg transform='rotate(0 0 0)'%3E%3Cuse href='%23g' transform='rotate(10)'/%3E%3Cuse href='%23g' transform='rotate(120)'/%3E%3Cuse href='%23g' transform='rotate(240)'/%3E%3C/g%3E%3Ccircle fill-opacity='0.1' fill='url(%23a)' r='3000'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-attachment: fixed;
-            background-size: cover;
-            border-radius: 10px;
+      /* Style untuk modal content */
+      .modal-content {
+        background-color: #d3ee8b;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3CradialGradient id='a' gradientUnits='objectBoundingBox'%3E%3Cstop offset='0' stop-color='%23E2FBFF'/%3E%3Cstop offset='1' stop-color='%23D3EE8B'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='0' y1='750' x2='1550' y2='750'%3E%3Cstop offset='0' stop-color='%23dbf5c5'/%3E%3Cstop offset='1' stop-color='%23D3EE8B'/%3E%3C/linearGradient%3E%3Cpath id='s' fill='url(%23b)' d='M1549.2 51.6c-5.4 99.1-20.2 197.6-44.2 293.6c-24.1 96-57.4 189.4-99.3 278.6c-41.9 89.2-92.4 174.1-150.3 253.3c-58 79.2-123.4 152.6-195.1 219c-71.7 66.4-149.6 125.8-232.2 177.2c-82.7 51.4-170.1 94.7-260.7 129.1c-90.6 34.4-184.4 60-279.5 76.3C192.6 1495 96.1 1502 0 1500c96.1-2.1 191.8-13.3 285.4-33.6c93.6-20.2 185-49.5 272.5-87.2c87.6-37.7 171.3-83.8 249.6-137.3c78.4-53.5 151.5-114.5 217.9-181.7c66.5-67.2 126.4-140.7 178.6-218.9c52.3-78.3 96.9-161.4 133-247.9c36.1-86.5 63.8-176.2 82.6-267.6c18.8-91.4 28.6-184.4 29.6-277.4c0.3-27.6 23.2-48.7 50.8-48.4s49.5 21.8 49.2 49.5c0 0.7 0 1.3-0.1 2L1549.2 51.6z'/%3E%3Cg id='g'%3E%3Cuse href='%23s' transform='scale(0.12) rotate(60)'/%3E%3Cuse href='%23s' transform='scale(0.2) rotate(10)'/%3E%3Cuse href='%23s' transform='scale(0.25) rotate(40)'/%3E%3Cuse href='%23s' transform='scale(0.3) rotate(-20)'/%3E%3Cuse href='%23s' transform='scale(0.4) rotate(-30)'/%3E%3Cuse href='%23s' transform='scale(0.5) rotate(20)'/%3E%3Cuse href='%23s' transform='scale(0.6) rotate(60)'/%3E%3Cuse href='%23s' transform='scale(0.7) rotate(10)'/%3E%3Cuse href='%23s' transform='scale(0.835) rotate(-40)'/%3E%3Cuse href='%23s' transform='scale(0.9) rotate(40)'/%3E%3Cuse href='%23s' transform='scale(1.05) rotate(25)'/%3E%3Cuse href='%23s' transform='scale(1.2) rotate(8)'/%3E%3Cuse href='%23s' transform='scale(1.333) rotate(-60)'/%3E%3Cuse href='%23s' transform='scale(1.45) rotate(-30)'/%3E%3Cuse href='%23s' transform='scale(1.6) rotate(10)'/%3E%3C/g%3E%3C/defs%3E%3Cg transform='rotate(0 0 0)'%3E%3Cg transform='rotate(0 0 0)'%3E%3Ccircle fill='url(%23a)' r='3000'/%3E%3Cg opacity='0.5'%3E%3Ccircle fill='url(%23a)' r='2000'/%3E%3Ccircle fill='url(%23a)' r='1800'/%3E%3Ccircle fill='url(%23a)' r='1700'/%3E%3Ccircle fill='url(%23a)' r='1651'/%3E%3Ccircle fill='url(%23a)' r='1450'/%3E%3Ccircle fill='url(%23a)' r='1250'/%3E%3Ccircle fill='url(%23a)' r='1175'/%3E%3Ccircle fill='url(%23a)' r='900'/%3E%3Ccircle fill='url(%23a)' r='750'/%3E%3Ccircle fill='url(%23a)' r='500'/%3E%3Ccircle fill='url(%23a)' r='380'/%3E%3Ccircle fill='url(%23a)' r='250'/%3E%3C/g%3E%3Cg transform='rotate(0 0 0)'%3E%3Cuse href='%23g' transform='rotate(10)'/%3E%3Cuse href='%23g' transform='rotate(120)'/%3E%3Cuse href='%23g' transform='rotate(240)'/%3E%3C/g%3E%3Ccircle fill-opacity='0.1' fill='url(%23a)' r='3000'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        background-attachment: fixed;
+        background-size: cover;
+        border-radius: 10px;
+      }
+
+      /* Style untuk tombol tutup */
+      .btn-close {
+        color: #333;
+        opacity: 1;
+      }
+
+      /* Style untuk judul */
+      .modal-title {
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      /* Style untuk input */
+      .form-control {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      /* Style untuk label */
+      .form-label {
+        color: #666;
+      }
+
+      /* Style untuk tombol Simpan Destinasi */
+      .btn-primary {
+        background-color: #4285f4;
+        border: none;
+      }
+
+      /* Memberi ruang antar elemen */
+      .mb-4 {
+        margin-bottom: 1.5rem;
+      }
+
+      /* Style untuk deskripsi */
+      textarea.form-control {
+        resize: vertical;
+      }
+
+      /* CSS untuk pagination */
+      .pagination {
+        display: flex;
+        justify-content: flex-end;
+        /* padding: 20px; */
+      }
+
+      .page-item {
+        margin: 0 5px;
+        list-style: none;
+      }
+
+      .page-link {
+        color: #333;
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .page-link:hover {
+        background-color: #d4d0d0;
+        color: #555;
+      }
+
+      /* Untuk mode mobile */
+      @media (max-width: 767px) {
+        .table-responsive-sm {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          -ms-overflow-style: -ms-autohiding-scrollbar;
+          margin-bottom: 16px;
+          /* Menambahkan jarak bawah pada mode mobile */
         }
 
-        /* Style untuk tombol tutup */
-        .btn-close {
-            color: #333;
-            opacity: 1;
+        .table-responsive-sm > .table {
+          margin-bottom: 0;
+          background-color: transparent;
         }
 
-        /* Style untuk judul */
-        .modal-title {
-            color: #333;
-            font-size: 1.5rem;
-            font-weight: bold;
+        .table-responsive-sm > .table > thead > tr > th,
+        .table-responsive-sm > .table > tbody > tr > th,
+        .table-responsive-sm > .table > tfoot > tr > th,
+        .table-responsive-sm > .table > thead > tr > td,
+        .table-responsive-sm > .table > tbody > tr > td,
+        .table-responsive-sm > .table > tfoot > tr > td {
+          white-space: nowrap;
         }
 
-        /* Style untuk input */
-        .form-control {
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        .table-responsive-sm > .table-bordered {
+          border: 0;
         }
 
-        /* Style untuk label */
-        .form-label {
-            color: #666;
+        .table-responsive-sm > .table-bordered > thead > tr > th:first-child,
+        .table-responsive-sm > .table-bordered > tbody > tr > th:first-child,
+        .table-responsive-sm > .table-bordered > tfoot > tr > th:first-child,
+        .table-responsive-sm > .table-bordered > thead > tr > td:first-child,
+        .table-responsive-sm > .table-bordered > tbody > tr > td:first-child,
+        .table-responsive-sm > .table-bordered > tfoot > tr > td:first-child {
+          border-left: 0;
         }
 
-        /* Style untuk tombol Simpan Destinasi */
-        .btn-primary {
-            background-color: #4285f4;
-            border: none;
+        .table-responsive-sm > .table-bordered > thead > tr > th:last-child,
+        .table-responsive-sm > .table-bordered > tbody > tr > th:last-child,
+        .table-responsive-sm > .table-bordered > tfoot > tr > th:last-child,
+        .table-responsive-sm > .table-bordered > thead > tr > td:last-child,
+        .table-responsive-sm > .table-bordered > tbody > tr > td:last-child,
+        .table-responsive-sm > .table-bordered > tfoot > tr > td:last-child {
+          border-right: 0;
         }
-
-        /* Memberi ruang antar elemen */
-        .mb-4 {
-            margin-bottom: 1.5rem;
-        }
-
-        /* Style untuk deskripsi */
-        textarea.form-control {
-            resize: vertical;
-        }
-
-        /* CSS untuk pagination */
-        .pagination {
-            display: flex;
-            justify-content: flex-end;
-            /* padding: 20px; */
-        }
-
-        .page-item {
-            margin: 0 5px;
-            list-style: none;
-        }
-
-        .page-link {
-            color: #333;
-            text-decoration: none;
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .page-link:hover {
-            background-color: #d4d0d0;
-            color: #555;
-        }
-
-        /* Untuk mode mobile */
-        @media (max-width: 767px) {
-            .table-responsive-sm {
-                display: block;
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                -ms-overflow-style: -ms-autohiding-scrollbar;
-                margin-bottom: 16px;
-                /* Menambahkan jarak bawah pada mode mobile */
-            }
-
-            .table-responsive-sm>.table {
-                margin-bottom: 0;
-                background-color: transparent;
-            }
-
-            .table-responsive-sm>.table>thead>tr>th,
-            .table-responsive-sm>.table>tbody>tr>th,
-            .table-responsive-sm>.table>tfoot>tr>th,
-            .table-responsive-sm>.table>thead>tr>td,
-            .table-responsive-sm>.table>tbody>tr>td,
-            .table-responsive-sm>.table>tfoot>tr>td {
-                white-space: nowrap;
-            }
-
-            .table-responsive-sm>.table-bordered {
-                border: 0;
-            }
-
-            .table-responsive-sm>.table-bordered>thead>tr>th:first-child,
-            .table-responsive-sm>.table-bordered>tbody>tr>th:first-child,
-            .table-responsive-sm>.table-bordered>tfoot>tr>th:first-child,
-            .table-responsive-sm>.table-bordered>thead>tr>td:first-child,
-            .table-responsive-sm>.table-bordered>tbody>tr>td:first-child,
-            .table-responsive-sm>.table-bordered>tfoot>tr>td:first-child {
-                border-left: 0;
-            }
-
-            .table-responsive-sm>.table-bordered>thead>tr>th:last-child,
-            .table-responsive-sm>.table-bordered>tbody>tr>th:last-child,
-            .table-responsive-sm>.table-bordered>tfoot>tr>th:last-child,
-            .table-responsive-sm>.table-bordered>thead>tr>td:last-child,
-            .table-responsive-sm>.table-bordered>tbody>tr>td:last-child,
-            .table-responsive-sm>.table-bordered>tfoot>tr>td:last-child {
-                border-right: 0;
-            }
-        }
+      }
     </style>
 
     <!-- Sweet Alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-        // Menggunakan event delegation untuk menangani event pada banyak tombol delete
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('delete-btn')) {
-                // Menampilkan SweetAlert2
-                Swal.fire({
-                    title: 'Apakah kamu yakin menghapus item ini?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    // Jika tombol "Ya, Hapus!" ditekan
-                    if (result.isConfirmed) {
-                        // Lakukan tindakan penghapusan di sini (misalnya: panggil fungsi hapus item)
-                        // Untuk contoh, saya akan menampilkan pesan alert
-                        Swal.fire('Item dihapus!', '', 'success');
-                    }
-                });
+      // Menggunakan event delegation untuk menangani event pada banyak tombol delete
+      document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("delete-btn")) {
+          // Menampilkan SweetAlert2
+          Swal.fire({
+            title: "Apakah kamu yakin menghapus item ini?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, Hapus!",
+            cancelButtonText: "Batal",
+          }).then((result) => {
+            // Jika tombol "Ya, Hapus!" ditekan
+            if (result.isConfirmed) {
+              // Lakukan tindakan penghapusan di sini (misalnya: panggil fungsi hapus item)
+              // Untuk contoh, saya akan menampilkan pesan alert
+              Swal.fire("Item dihapus!", "", "success");
             }
-        });
+          });
+        }
+      });
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     {% include 'header.html' %}
 
     <!-- review Start -->
     <div class="container-fluid pt-4 px-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><i>Manajemen Destinasi</i></li>
-            </ol>
-        </nav>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <!-- Tombol Modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#ModalLoginForm" style="margin-bottom: 10px; float: right;">
-                        &plus; Add
-                    </button>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <i>Manajemen Destinasi</i>
+          </li>
+        </ol>
+      </nav>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <!-- Tombol Modal -->
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#ModalLoginForm"
+              style="margin-bottom: 10px; float: right"
+            >
+              &plus; Add
+            </button>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="ModalLoginForm" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Tambah Destinasi</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body p-4">
-                                    <form enctype="multipart/form-data" method="POST" action="/add_destinasi">
-                                        <!-- Nama Destinasi -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="namaDestinasi" class="form-control" name="namaDestinasi"/>
-                                            <label class="form-label" for="namaDestinasi">Nama Destinasi</label>
-                                        </div>
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="ModalLoginForm"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Tambah Destinasi
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body p-4">
+                    <form
+                      enctype="multipart/form-data"
+                      method="POST"
+                      action="/add_destinasi"
+                    >
+                      <!-- Nama Destinasi -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="namaDestinasi"
+                          class="form-control"
+                          name="namaDestinasi"
+                        />
+                        <label class="form-label" for="namaDestinasi"
+                          >Nama Destinasi</label
+                        >
+                      </div>
 
-                                        <!-- Stok Tiket -->
-                                        <div class="form-outline mb-4">
-                                            <input type="number" id="stokTiket" class="form-control" name="stokTiket"/>
-                                            <label class="form-label" for="stokTiket">Stok Tiket</label>
-                                        </div>
+                      <!-- Stok Tiket -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="number"
+                          id="stokTiket"
+                          class="form-control"
+                          name="stokTiket"
+                        />
+                        <label class="form-label" for="stokTiket"
+                          >Stok Tiket</label
+                        >
+                      </div>
 
-                                        <!-- Judul Attraction 1 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="judulAttraction1" class="form-control" name="judulAttraction1"/>
-                                            <label class="form-label" for="judulAttraction1">Judul Attraction
-                                                1</label>
-                                        </div>
+                      <!-- Judul Attraction 1 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="judulAttraction1"
+                          class="form-control"
+                          name="judulAttraction1"
+                        />
+                        <label class="form-label" for="judulAttraction1"
+                          >Judul Attraction 1</label
+                        >
+                      </div>
 
-                                        <!-- Subtitle Attraction 1 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="subtitleAttraction1" class="form-control" name="subtitleAttraction1"/>
-                                            <label class="form-label" for="subtitleAttraction1">Subtitle
-                                                Attraction 1</label>
-                                        </div>
+                      <!-- Subtitle Attraction 1 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="subtitleAttraction1"
+                          class="form-control"
+                          name="subtitleAttraction1"
+                        />
+                        <label class="form-label" for="subtitleAttraction1"
+                          >Subtitle Attraction 1</label
+                        >
+                      </div>
 
-                                        <!-- Harga Atrraction 1 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="number" id="hargaAttraction1" class="form-control" name="hargaAttraction1"/>
-                                            <label class="form-label" for="hargaAttraction1">Harga
-                                                Attraction 1</label>
-                                        </div>
+                      <!-- Harga Atrraction 1 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="number"
+                          id="hargaAttraction1"
+                          class="form-control"
+                          name="hargaAttraction1"
+                        />
+                        <label class="form-label" for="hargaAttraction1"
+                          >Harga Attraction 1</label
+                        >
+                      </div>
 
-                                        <!-- Gambar Attraction 1 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="file" id="gambarAttraction1" class="form-control" name="gambarAttraction1"/>
-                                            <label class="form-label" for="gambarAttraction1">Unggah Gambar
-                                                Attraction 1</label>
-                                        </div>
+                      <!-- Gambar Attraction 1 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="file"
+                          id="gambarAttraction1"
+                          class="form-control"
+                          name="gambarAttraction1"
+                        />
+                        <label class="form-label" for="gambarAttraction1"
+                          >Unggah Gambar Attraction 1</label
+                        >
+                      </div>
 
-                                        <!-- Judul Attraction 2 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="judulAttraction2" class="form-control" name="judulAttraction2"/>
-                                            <label class="form-label" for="judulAttraction2">Judul Attraction
-                                                2</label>
-                                        </div>
+                      <!-- Judul Attraction 2 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="judulAttraction2"
+                          class="form-control"
+                          name="judulAttraction2"
+                        />
+                        <label class="form-label" for="judulAttraction2"
+                          >Judul Attraction 2</label
+                        >
+                      </div>
 
-                                        <!-- Subtitle Attraction 2 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="subtitleAttraction2" class="form-control" name="subtitleAttraction2"/>
-                                            <label class="form-label" for="subtitleAttraction2">Subtitle
-                                                Attraction 2</label>
-                                        </div>
+                      <!-- Subtitle Attraction 2 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="subtitleAttraction2"
+                          class="form-control"
+                          name="subtitleAttraction2"
+                        />
+                        <label class="form-label" for="subtitleAttraction2"
+                          >Subtitle Attraction 2</label
+                        >
+                      </div>
 
-                                        <!-- Harga Atrraction 2 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="number" id="hargaAttraction2" class="form-control" name="hargaAttraction2/>
-                                            <label class="form-label" for="hargaAttraction2">Harga
-                                                Attraction 2</label>
-                                        </div>
+                      <!-- Harga Atrraction 2 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="number"
+                          id="hargaAttraction2"
+                          class="form-control"
+                          name="hargaAttraction2"
+                        />
+                        <label class="form-label" for="hargaAttraction2"
+                          >Harga Attraction 2</label
+                        >
+                      </div>
 
-                                        <!-- Gambar Attraction 2 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="file" id="gambarAttraction2" class="form-control" name="gambarAttraction2"/>
-                                            <label class="form-label" for="gambarAttraction2">Unggah Gambar
-                                                Attraction 2</label>
-                                        </div>
+                      <!-- Gambar Attraction 2 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="file"
+                          id="gambarAttraction2"
+                          class="form-control"
+                          name="gambarAttraction2"
+                        />
+                        <label class="form-label" for="gambarAttraction2"
+                          >Unggah Gambar Attraction 2</label
+                        >
+                      </div>
 
-                                        <!-- Judul Attraction 3 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="judulAttraction2" class="form-control" name="judulAttraction3"/>
-                                            <label class="form-label" for="judulAttraction2">Judul Attraction
-                                                3</label>
-                                        </div>
+                      <!-- Judul Attraction 3 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="judulAttraction2"
+                          class="form-control"
+                          name="judulAttraction3"
+                        />
+                        <label class="form-label" for="judulAttraction2"
+                          >Judul Attraction 3</label
+                        >
+                      </div>
 
-                                        <!-- Subtitle Attraction 3 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="subtitleAttraction3" class="form-control" name="subtitleAttraction3"/>
-                                            <label class="form-label" for="subtitleAttraction3">Subtitle
-                                                Attraction 3</label>
-                                        </div>
+                      <!-- Subtitle Attraction 3 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="subtitleAttraction3"
+                          class="form-control"
+                          name="subtitleAttraction3"
+                        />
+                        <label class="form-label" for="subtitleAttraction3"
+                          >Subtitle Attraction 3</label
+                        >
+                      </div>
 
-                                        <!-- Harga Atrraction 3 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="number" id="hargaAttraction3" class="form-control" name="hargaAttraction3"/>
-                                            <label class="form-label" for="hargaAttraction3">Harga
-                                                Attraction 3</label>
-                                        </div>
+                      <!-- Harga Atrraction 3 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="number"
+                          id="hargaAttraction3"
+                          class="form-control"
+                          name="hargaAttraction3"
+                        />
+                        <label class="form-label" for="hargaAttraction3"
+                          >Harga Attraction 3</label
+                        >
+                      </div>
 
-                                        <!-- Gambar Attraction 3 -->
-                                        <div class="form-outline mb-4">
-                                            <input type="file" id="gambarAttraction3" class="form-control" name="gambarAttraction3"/>
-                                            <label class="form-label" for="gambarAttraction3">Unggah Gambar
-                                                Attraction 3</label>
-                                        </div>
+                      <!-- Gambar Attraction 3 -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="file"
+                          id="gambarAttraction3"
+                          class="form-control"
+                          name="gambarAttraction3"
+                        />
+                        <label class="form-label" for="gambarAttraction3"
+                          >Unggah Gambar Attraction 3</label
+                        >
+                      </div>
 
-                                        <!-- Nama Kota -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="namaKota" class="form-control" name="namaKota"/>
-                                            <label class="form-label" for="namaKota">Nama Kota</label>
-                                        </div>
+                      <!-- Nama Kota -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="namaKota"
+                          class="form-control"
+                          name="namaKota"
+                        />
+                        <label class="form-label" for="namaKota"
+                          >Nama Kota</label
+                        >
+                      </div>
 
-                                        <!-- Quotes -->
-                                        <div class="form-outline mb-4">
-                                            <input type="text" id="quotes" class="form-control" name="quotes"/>
-                                            <label class="form-label" for="quotes">Quotes</label>
-                                        </div>
+                      <!-- Quotes -->
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="quotes"
+                          class="form-control"
+                          name="quotes"
+                        />
+                        <label class="form-label" for="quotes">Quotes</label>
+                      </div>
 
-                                        <!-- Gambar Artikel -->
-                                        <div class="form-outline mb-4">
-                                            <input type="file" id="gambarArtikel" class="form-control" name="gambarArtikel/>
-                                            <label class="form-label" for="gambarArtikel">Unggah Gambar
-                                                Artikel</label>
-                                        </div>
+                      <!-- Gambar Artikel -->
+                      <div class="form-outline mb-4">
+                        <input type="file" id="gambarArtikel"
+                        class="form-control" name="gambarArtikel/>
+                        <label class="form-label" for="gambarArtikel"
+                          >Unggah Gambar Artikel</label
+                        >
+                      </div>
 
-                                        <!-- Deskripsi Artikel -->
-                                        <div class="form-outline mb-4">
-                                            <textarea id="deskripsiArtikel" class="form-control" rows="4" name="deskripsiArtikel"></textarea>
-                                            <label class="form-label" for="deskripsiArtikel">Deskripsi
-                                                Artikel</label>
-                                        </div>
+                      <!-- Deskripsi Artikel -->
+                      <div class="form-outline mb-4">
+                        <textarea
+                          id="deskripsiArtikel"
+                          class="form-control"
+                          rows="4"
+                          name="deskripsiArtikel"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiArtikel"
+                          >Deskripsi Artikel</label
+                        >
+                      </div>
 
-                                        <!-- Deskripsi Attraction 1 -->
-                                        <div class="form-outline mb-4">
-                                            <textarea id="deskripsiAttraction1" class="form-control"
-                                                rows="4" name="deskripsiAttraction1"></textarea>
-                                            <label class="form-label" for="deskripsiAttraction1">Deskripsi
-                                                Attraction 1</label>
-                                        </div>
+                      <!-- Deskripsi Attraction 1 -->
+                      <div class="form-outline mb-4">
+                        <textarea
+                          id="deskripsiAttraction1"
+                          class="form-control"
+                          rows="4"
+                          name="deskripsiAttraction1"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiAttraction1"
+                          >Deskripsi Attraction 1</label
+                        >
+                      </div>
 
-                                        <!-- Deskripsi Attraction 2 -->
-                                        <div class="form-outline mb-4">
-                                            <textarea id="deskripsiAttraction2" class="form-control"
-                                                rows="4" name="deskripsiAttraction2"></textarea>
-                                            <label class="form-label" for="deskripsiAttraction2">Deskripsi
-                                                Attraction 2</label>
-                                        </div>
+                      <!-- Deskripsi Attraction 2 -->
+                      <div class="form-outline mb-4">
+                        <textarea
+                          id="deskripsiAttraction2"
+                          class="form-control"
+                          rows="4"
+                          name="deskripsiAttraction2"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiAttraction2"
+                          >Deskripsi Attraction 2</label
+                        >
+                      </div>
 
-                                        <!-- Deskripsi Attraction 3 -->
-                                        <div class="form-outline mb-4">
-                                            <textarea id="deskripsiAttraction3" class="form-control"
-                                                rows="4" name="deskripsiAttraction3"></textarea>
-                                            <label class="form-label" for="deskripsiAttraction3">Deskripsi
-                                                Attraction 3</label>
-                                        </div>
+                      <!-- Deskripsi Attraction 3 -->
+                      <div class="form-outline mb-4">
+                        <textarea
+                          id="deskripsiAttraction3"
+                          class="form-control"
+                          rows="4"
+                          name="deskripsiAttraction3"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiAttraction3"
+                          >Deskripsi Attraction 3</label
+                        >
+                      </div>
 
-                                        <!-- Submit button -->
-                                        <button type="submit" class="btn btn-primary btn-block"
-                                            onclick="simpanDestinasi()">Simpan
-                                            Destinasi</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Konten tabel -->
-                    <div class="table-responsive-sm">
-                        <table class="table table-bordered custom-table">
-                            <thead class="table-success">
-                                <tr>
-                                    <th scope="col" class="text-center">NO</th>
-                                    <th scope="col">Nama Destinasi</th>
-                                    <th scope="col">Lokasi Destinasi</th>
-                                    <th scope="col">Stok Tiket</th>
-                                    <th scope="col">Harga Satuan</th>
-                                    <!-- <th scope="col">Upload</th> -->
-                                    <!-- <th scope="col">Status</th>
-                                    <th scope="col">E-Ticket</th> -->
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row" class="text-center">1</th>
-                                    <td>Pulau Komodo</td>
-                                    <td>NTB</td>
-                                    <td>527</td>
-                                    <td>RP. 25.000</td>
-                                    <!-- <td><input type="file" /></td> -->
-                                    <!-- <td>Confirmed</td> -->
-                                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm  delete-btn">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="text-center">2</th>
-                                    <td>Istano Basa Pagaruyung</td>
-                                    <td>Pariaman</td>
-                                    <td>391</td>
-                                    <td>RP. 75.000</td>
-                                    <!-- <td><input type="file" /></td> -->
-                                    <!-- <td>Pending</td> -->
-                                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm  delete-btn">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="text-center">3</th>
-                                    <td>Museum Kereta Api Ambarawa</td>
-                                    <td>Lupa cuy</td>
-                                    <td>860</td>
-                                    <td>RP. 60.000</td>
-                                    <!-- <td><input type="file" /></td> -->
-                                    <!-- <td>Pending</td> -->
-                                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm  delete-btn">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="text-center">4</th>
-                                    <td>Curug Cimahi</td>
-                                    <td>Bandung</td>
-                                    <td>120</td>
-                                    <td>RP. 50.000</td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="text-center">5</th>
-                                    <td>Raja Ampat Islands</td>
-                                    <td>Papua Barat</td>
-                                    <td>300</td>
-                                    <td>RP. 200.000</td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                        </ul>
-                    </nav>
+                      <!-- Submit button -->
+                      <button type="submit" class="btn btn-primary btn-block">
+                        Simpan Destinasi
+                      </button>
+                    </form>
+                  </div>
                 </div>
+              </div>
             </div>
+
+            <!-- Konten tabel -->
+            <div class="table-responsive-sm">
+              <table class="table table-bordered custom-table">
+                <thead class="table-success">
+                  <tr>
+                    <th scope="col" class="text-center">NO</th>
+                    <th scope="col">Nama Destinasi</th>
+                    <th scope="col">Lokasi Destinasi</th>
+                    <th scope="col">Stok Tiket</th>
+                    <th scope="col">Harga Satuan</th>
+                    <!-- <th scope="col">Upload</th> -->
+                    <!-- <th scope="col">Status</th>
+                                    <th scope="col">E-Ticket</th> -->
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row" class="text-center">1</th>
+                    <td>Pulau Komodo</td>
+                    <td>NTB</td>
+                    <td>527</td>
+                    <td>RP. 25.000</td>
+                    <!-- <td><input type="file" /></td> -->
+                    <!-- <td>Confirmed</td> -->
+                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
+                    <td class="text-center">
+                      <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm delete-btn"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-center">2</th>
+                    <td>Istano Basa Pagaruyung</td>
+                    <td>Pariaman</td>
+                    <td>391</td>
+                    <td>RP. 75.000</td>
+                    <!-- <td><input type="file" /></td> -->
+                    <!-- <td>Pending</td> -->
+                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
+                    <td class="text-center">
+                      <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm delete-btn"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-center">3</th>
+                    <td>Museum Kereta Api Ambarawa</td>
+                    <td>Lupa cuy</td>
+                    <td>860</td>
+                    <td>RP. 60.000</td>
+                    <!-- <td><input type="file" /></td> -->
+                    <!-- <td>Pending</td> -->
+                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
+                    <td class="text-center">
+                      <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm delete-btn"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-center">4</th>
+                    <td>Curug Cimahi</td>
+                    <td>Bandung</td>
+                    <td>120</td>
+                    <td>RP. 50.000</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm delete-btn"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-center">5</th>
+                    <td>Raja Ampat Islands</td>
+                    <td>Papua Barat</td>
+                    <td>300</td>
+                    <td>RP. 200.000</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm delete-btn"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-end">
+                <li class="page-item">
+                  <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
+      </div>
     </div>
     <!-- review End -->
-    <div class="mt-5">
-        {% include 'footer.html' %}
-    </div>
+    <div class="mt-5">{% include 'footer.html' %}</div>
     <!-- bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
+  </body>
 </html>

@@ -83,10 +83,8 @@ def register():
 def destinations():
     return render_template('destinations.html')
 
-@app.route('/add_destinasi', methods=['POST'])
+@app.route('/add_destinasi', methods=['GET','POST'])
 def add_destinasi():
-    try:
-        # Mengambil data dari permintaan POST
         data = request.form
         nama_destinasi = data['namaDestinasi']
         stok_tiket = int(data['stokTiket'])
@@ -154,9 +152,20 @@ def add_destinasi():
         db.destinasi.insert_one(destinasi_data)
 
         return jsonify({'status': 'Success', 'message': 'Destinasi added successfully'})
-    except Exception as e:
-        return jsonify({'status': 'Error', 'message': str(e)})
-    return render_template('manajemen_destinasi.html')
+      
+@app.route('/listdestinasi', methods=['GET'])
+def get_destinasi():
+  destinasi = db.destinasi.find()
+  destinasi_list = []
+  for destinasi_info in destinasi:
+      destinasi_list.append({
+          'id': str(destinasi_info['_id']),
+          'name': destinasi_info['name'],
+          'description': destinasi_info['description'],
+          'image_wisata' : destinasi_info['image_wisata'],
+          'total_tickets': destinasi_info['total_tickets']
+      })
+  return jsonify(destinasi_list), 200
 
 @app.route('/detail_destinasi/<title>', methods=['GET'])
 def detail_destinasi(title):

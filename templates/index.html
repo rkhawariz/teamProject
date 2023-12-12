@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <link href="../static/css/mystyle.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="../static/js/home.js" defer></script>
     <style>
       a {
@@ -63,6 +64,35 @@
         /* Tetap menggunakan warna teks default saat dihover */
       }
     </style>
+
+    <script>
+    //    $(document).ready(function () {
+    //     listingDestinasi();
+    // });
+
+    function listingDestinasi() {
+        $.ajax({
+            url: "/listdestinasi",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                let listDestinasi = response;
+                $('#destinasi-list').empty();
+                for (let i = 0; i < listDestinasi.length; i++) {
+                    if (i >= 10) {
+                        break;
+                    }
+                    let destinasi_info = listDestinasi[i];
+                    let temp_html = '<div class="col"><a href="/destinasi/'+ destinasi_info.id +'"><div class="card border-light myratio rounded-4" style="width: 12.6rem; height: 17rem"><img src="'+ destinasi_info.imageDestinasi +'" class="card-img img-fluid h-100 w-100" alt="..." /> <div class="overlay-text p-1"><h6>'+ destinasi_info.name +'</h6></div></div></a></div>'
+                    $('#destinasi-list').append(temp_html);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+    </script>
   </head>
 
   <body id="page-top">
@@ -288,7 +318,7 @@
             </a>
           </div>
           <div class="col">
-            <a href="">
+            <a href="/detail_destinasi" onclick="send_data('${namaDestinasi}')">
               <div
                 class="card border-light myratio rounded-4"
                 style="width: 12.6rem; height: 17rem"
