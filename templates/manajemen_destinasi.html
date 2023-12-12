@@ -64,6 +64,10 @@
         margin-bottom: 1.5rem;
       }
 
+      hr.myhr {
+        border: 1px solid black;
+      }
+
       /* Style untuk deskripsi */
       textarea.form-control {
         resize: vertical;
@@ -238,17 +242,18 @@
                         >
                       </div>
 
-                      <!-- Stok Tiket -->
+                      <!-- gambar card destinasi -->
                       <div class="form-outline mb-4">
                         <input
-                          type="number"
-                          id="stokTiket"
+                          type="file"
+                          id="gambarCardDestinasi"
                           class="form-control"
-                          name="stokTiket"
+                          name="gambarCardDestinasi"
                         />
-                        <label class="form-label" for="stokTiket"
-                          >Stok Tiket</label
+                        <label class="form-label" for="gambarCardDestinasi"
+                          >Unggah Gambar Card Destinasi (Potrait)</label
                         >
+                        <hr class="myhr">
                       </div>
 
                       <!-- Judul Attraction 1 -->
@@ -286,7 +291,7 @@
                           name="hargaAttraction1"
                         />
                         <label class="form-label" for="hargaAttraction1"
-                          >Harga Attraction 1</label
+                          >Harga Tiket Attraction 1</label
                         >
                       </div>
 
@@ -299,8 +304,22 @@
                           name="gambarAttraction1"
                         />
                         <label class="form-label" for="gambarAttraction1"
-                          >Unggah Gambar Attraction 1</label
+                          >Unggah Gambar Attraction 1 (landscape)</label
                         >
+                      </div>
+
+                      <!-- Deskripsi Attraction 1 -->
+                      <div class="form-outline mb-4">
+                        <textarea
+                          id="deskripsiAttraction1"
+                          class="form-control"
+                          rows="4"
+                          name="deskripsiAttraction1"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiAttraction1"
+                          >Deskripsi Attraction 1</label
+                        >
+                        <hr class="myhr">
                       </div>
 
                       <!-- Judul Attraction 2 -->
@@ -338,7 +357,7 @@
                           name="hargaAttraction2"
                         />
                         <label class="form-label" for="hargaAttraction2"
-                          >Harga Attraction 2</label
+                          >Harga Tiket Attraction 2</label
                         >
                       </div>
 
@@ -351,8 +370,22 @@
                           name="gambarAttraction2"
                         />
                         <label class="form-label" for="gambarAttraction2"
-                          >Unggah Gambar Attraction 2</label
+                          >Unggah Gambar Attraction 2 (landscape)</label
                         >
+                      </div>
+
+                      <!-- Deskripsi Attraction 2 -->
+                      <div class="form-outline mb-4">
+                        <textarea
+                          id="deskripsiAttraction2"
+                          class="form-control"
+                          rows="4"
+                          name="deskripsiAttraction2"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiAttraction2"
+                          >Deskripsi Attraction 2</label
+                        >
+                        <hr class="myhr">
                       </div>
 
                       <!-- Judul Attraction 3 -->
@@ -390,7 +423,7 @@
                           name="hargaAttraction3"
                         />
                         <label class="form-label" for="hargaAttraction3"
-                          >Harga Attraction 3</label
+                          >Harga Tiket Attraction 3</label
                         >
                       </div>
 
@@ -403,21 +436,22 @@
                           name="gambarAttraction3"
                         />
                         <label class="form-label" for="gambarAttraction3"
-                          >Unggah Gambar Attraction 3</label
+                          >Unggah Gambar Attraction 3 (landscape)</label
                         >
                       </div>
 
-                      <!-- Nama Kota -->
+                      <!-- Deskripsi Attraction 3 -->
                       <div class="form-outline mb-4">
-                        <input
-                          type="text"
-                          id="namaKota"
+                        <textarea
+                          id="deskripsiAttraction3"
                           class="form-control"
-                          name="namaKota"
-                        />
-                        <label class="form-label" for="namaKota"
-                          >Nama Kota</label
+                          rows="4"
+                          name="deskripsiAttraction3"
+                        ></textarea>
+                        <label class="form-label" for="deskripsiAttraction3"
+                          >Deskripsi Attraction 3</label
                         >
+                        <hr class="myhr">
                       </div>
 
                       <!-- Quotes -->
@@ -433,10 +467,14 @@
 
                       <!-- Gambar Artikel -->
                       <div class="form-outline mb-4">
-                        <input type="file" id="gambarArtikel"
-                        class="form-control" name="gambarArtikel/>
+                        <input
+                          type="file"
+                          id="gambarArtikel"
+                          class="form-control"
+                          name="gambarArtikel"
+                        />
                         <label class="form-label" for="gambarArtikel"
-                          >Unggah Gambar Artikel</label
+                          >Unggah Gambar Artikel (1:1)</label
                         >
                       </div>
 
@@ -450,45 +488,6 @@
                         ></textarea>
                         <label class="form-label" for="deskripsiArtikel"
                           >Deskripsi Artikel</label
-                        >
-                      </div>
-
-                      <!-- Deskripsi Attraction 1 -->
-                      <div class="form-outline mb-4">
-                        <textarea
-                          id="deskripsiAttraction1"
-                          class="form-control"
-                          rows="4"
-                          name="deskripsiAttraction1"
-                        ></textarea>
-                        <label class="form-label" for="deskripsiAttraction1"
-                          >Deskripsi Attraction 1</label
-                        >
-                      </div>
-
-                      <!-- Deskripsi Attraction 2 -->
-                      <div class="form-outline mb-4">
-                        <textarea
-                          id="deskripsiAttraction2"
-                          class="form-control"
-                          rows="4"
-                          name="deskripsiAttraction2"
-                        ></textarea>
-                        <label class="form-label" for="deskripsiAttraction2"
-                          >Deskripsi Attraction 2</label
-                        >
-                      </div>
-
-                      <!-- Deskripsi Attraction 3 -->
-                      <div class="form-outline mb-4">
-                        <textarea
-                          id="deskripsiAttraction3"
-                          class="form-control"
-                          rows="4"
-                          name="deskripsiAttraction3"
-                        ></textarea>
-                        <label class="form-label" for="deskripsiAttraction3"
-                          >Deskripsi Attraction 3</label
                         >
                       </div>
 
