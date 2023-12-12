@@ -39,9 +39,25 @@ def home():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+  return render_template('login.html')
 
-@app.route('/sign-up', methods=['GET', 'POST'])
+@app.route('/login_user', methods=['POST'])
+def login_user():
+    if request.method == 'POST':
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        user = db.user.find_one({'email': email})
+
+        if user and user['password'] == hashlib.sha256(password.encode('utf-8')).hexdigest():
+            # Jika autentikasi berhasil
+            return jsonify({'success': True, 'message': 'Login successful!'})
+        else:
+            # Jika autentikasi gagal
+            return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
+
+@app.route('/sign-up', methods=['POST'])
 def register():
     if request.method == 'POST':
         try:
@@ -63,13 +79,12 @@ def register():
                     'nama': nama,
                     'email': email,
                     'password': password_hash,
-                    'confirm_password': password_hash,
                     'role': 'user',
                     'foto_profile': '',
                     'tanggal_register': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
 
-                # Insert the user_data into the 'user' collection
+                # Insert user_data ke koleksi 'user'
                 db.user.insert_one(user_data)
 
                 return jsonify({'status': 'Success', 'message': 'Account created successfully'})
