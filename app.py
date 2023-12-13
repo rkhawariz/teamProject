@@ -373,27 +373,52 @@ def beranda_admin():
       msg = 'There was a problem logging you in'
   return render_template('login.html', msg=msg)
 
+
 @app.route('/manajemen_tiket', methods=['GET'])
 def manajemen_tiket():
-  token_receive = request.cookies.get(TOKEN_KEY)
-  try:
-      payload =jwt.decode(
-          token_receive,
-          SECRET_KEY,
-          algorithms=['HS256']
-      )
-      user_info = db.user.find_one({"email": payload["id"]})
-      is_admin = user_info.get("role") == "admin"
-      logged_in = True
-      if is_admin:
-        return render_template('manajemen_tiket.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
-      else:
-        return render_template('login.html')
-  except jwt.ExpiredSignatureError:
-      msg = 'Your token has expired'
-  except jwt.exceptions.DecodeError:
-      msg = 'There was a problem logging you in'
-  return render_template('login.html', msg=msg)
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        user_info = db.tiket.find_one({"email": payload["id"]})
+        logged_in = True
+
+        if user_info:
+            is_admin = user_info.get("role") == "admin" if "role" in user_info else False
+
+            if is_admin:
+                tikets = db.tiket.find()
+                tiket_list = []
+
+                for tiket in tikets:
+                    tiket_info = {
+                        'id': str(tiket['_id']),
+                        'namaAttraction': tiket['namaAttraction'],
+                        'namaPemesan': tiket['namaPemesan'],
+                        'hargaTiket': tiket['hargaTiket'],
+                        'jumlahTiket': tiket['jumlahTiket'],
+                        'totalHargaTiket': tiket['totalHargaTiket'],
+                        'tanggal': tiket['tanggal'],
+                        'status': tiket['status'],
+                    }
+                    tiket_list.append(tiket_info)
+
+                return render_template('manajemen_tiket.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin, data_tiket=tiket_list)
+            else:
+                return render_template('login.html')
+        else:
+            return render_template('login.html', msg='User not found')
+    except jwt.ExpiredSignatureError:
+        msg = 'Your token has expired'
+    except jwt.exceptions.DecodeError:
+        msg = 'There was a problem logging you in'
+    
+    return render_template('login.html', msg=msg)
+
+
 
 @app.route('/ulasan_rekomendasi', methods=['GET'])
 def ulasan_rekomendasi():
@@ -419,25 +444,72 @@ def ulasan_rekomendasi():
 
 @app.route('/manajemen_user', methods=['GET'])
 def manajemen_user():
-  token_receive = request.cookies.get(TOKEN_KEY)
-  try:
-      payload =jwt.decode(
-          token_receive,
-          SECRET_KEY,
-          algorithms=['HS256']
-      )
-      user_info = db.user.find_one({"email": payload["id"]})
-      is_admin = user_info.get("role") == "admin"
-      logged_in = True
-      if is_admin:
-        return render_template('manajemen_user.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
-      else:
-        return render_template('login.html')
-  except jwt.ExpiredSignatureError:
-      msg = 'Your token has expired'
-  except jwt.exceptions.DecodeError:
-      msg = 'There was a problem logging you in'
-  return render_template('login.html', msg=msg)
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload =jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        user_info = db.user.find_one({"email": payload["id"]})
+        is_admin = user_info.get("role") == "admin"
+        logged_in = True
+        if is_admin:
+            users = db.user.find()
+            user_list = []
+            
+            for user in users:
+                user_info = {
+                    'id': str(user['_id']),
+                    'nama': user['nama'],
+                    'email': user['email'],
+                    'password': user['password'],
+                    'role' : user['role'],
+                    # 'status': user['status'],
+                }
+                user_list.append(user_info)
+            
+            return render_template('manajemen_user.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin, users=user_list)
+        else:
+            return render_template('login.html')
+    except jwt.ExpiredSignatureError:
+        msg = 'Your token has expired'
+    except jwt.exceptions.DecodeError:
+        msg = 'There was a problem logging you in'
+    return render_template('login.html', msg=msg)
+
+
+@app.route('/edit_user/<user_id>', methods=['PUT'])
+def edit_user(user_id):
+    try:
+        data = request.json
+        
+        # Lakukan pembaruan data pengguna di database menggunakan user_id dan data yang baru
+        # Contoh:
+        db.user.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$set': {
+                'nama': data['nama'],
+                'email': data['email'],
+                'role': data['role'],
+                'password': data['password']  # Pastikan cara penyimpanan password yang aman
+            }}
+        )
+        return jsonify({'message': 'User updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/delete_user/<user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    try:
+        # Hapus data pengguna dari database berdasarkan user_id
+        # Contoh:
+        db.user.delete_one({'_id': ObjectId(user_id)})
+        return jsonify({'message': 'User deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 @app.route('/profile_admin', methods=['GET'])
 def profile_admin():
