@@ -178,11 +178,11 @@
               aria-expanded="false"
             >
               <span class="mr-2 d-none d-lg-inline small"
-                >{{ user_info.name }}</span
+                >{{ user_info.nama }}</span
               >
               <img
                 class="img-profile rounded-circle"
-                src="../static/img/profile_placeholder.png"
+                src="../{{ user_info.foto_profile }}"
               />
             </a>
             <ul class="dropdown-menu submenu dropdown-menu-dark">
@@ -263,17 +263,19 @@
         </div>
                 {% endif %}
             {% endfor %}
+
+            {% for key, attraction in destinasi_info.attractions.items() %}
+          {% if key == "attraction2" %}
         <div
           class="item"
           style="
-            background-image: url(../static/img/detail_destinasi/gambarAttraction2.jpg);
+            background-image: url(../{{ attraction.gambar }});
           "
         >
           <div class="content">
-            <div class="attr-title">{{ destinasi_info.namaAttr2 }}</div>
+            <div class="attr-title">{{ attraction.judul }}</div>
             <div class="des">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde
-              voluptatum
+              {{ attraction.subtitle}}
             </div>
             <div class="tombol-container">
               <!-- ganti dengan Jinja2 -->
@@ -281,9 +283,9 @@
                 class="btn btn-light mb-2"
                 data-bs-toggle="modal"
                 data-bs-target="#mymodal"
-                data-bs-attraction="{{ destinasi_info.namaAttr2 }}"
+                data-bs-attraction="{{ attraction.judul }}"
                 data-bs-pemesan="{{ user_info.name }}"
-                data-bs-hargaTiket="{{ destinasi_info.hargaTiketAttr2 }}"
+                data-bs-hargaTiket="{{ attraction.harga }}"
               >
                 Pesan Tiket
               </button>
@@ -293,35 +295,42 @@
             </div>
           </div>
         </div>
-        <div
-          class="item"
-          style="
-            background-image: url(../static/img/detail_destinasi/gambarAttraction3.jpg);
-          "
-        >
-          <div class="content">
-            <div class="attr-title">{{ destinasi_info.namaAttr3 }}</div>
-            <div class="des">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde
-              voluptatum
-            </div>
-            <div class="tombol-container">
-              <button
-                class="btn btn-light mb-2"
-                data-bs-toggle="modal"
-                data-bs-target="#mymodal"
-                data-bs-attraction="{{ destinasi_info.namaAttr3 }}"
-                data-bs-pemesan="{{ user_info.name }}"
-                data-bs-hargaTiket="{{ destinasi_info.hargaTiketAttr3 }}"
-              >
-                Pesan Tiket
-              </button>
-              <a href="#attraction3"
-                ><button class="btn btn-outline-light">Lihat Detail</button></a
-              >
+                {% endif %}
+            {% endfor %}
+
+            {% for key, attraction in destinasi_info.attractions.items() %}
+            {% if key == "attraction3" %}
+          <div
+            class="item"
+            style="
+              background-image: url(../{{ attraction.gambar }});
+            "
+          >
+            <div class="content">
+              <div class="attr-title">{{ attraction.judul }}</div>
+              <div class="des">
+                {{ attraction.subtitle}}
+              </div>
+              <div class="tombol-container">
+                <!-- ganti dengan Jinja2 -->
+                <button
+                  class="btn btn-light mb-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#mymodal"
+                  data-bs-attraction="{{ attraction.judul }}"
+                  data-bs-pemesan="{{ user_info.name }}"
+                  data-bs-hargaTiket="{{ attraction.harga }}"
+                >
+                  Pesan Tiket
+                </button>
+                <a href="#attraction2"
+                  ><button class="btn btn-outline-light">Lihat Detail</button></a
+                >
+              </div>
             </div>
           </div>
-        </div>
+                  {% endif %}
+              {% endfor %}
       </div>
       <div class="mybuttons">
         <button onclick="prev()" id="prev">
@@ -435,7 +444,7 @@
         </h2>
         <br />
         <h3 class="section-subheading text-muted mr-4 ml-4">
-          “Jogja terbuat dari rindu pulang dan angkringan.”
+          “{{ destinasi_info.quotes }}”
         </h3>
       </div>
     </section>
@@ -446,35 +455,24 @@
         <img
           class="article-img"
           style="border-radius: 15px; max-height: 18rem"
-          src="../static/img/detail_destinasi/gambarArtikel.jpg"
+          src="../{{ destinasi_info.gambar_artikel }}"
           alt=""
         />
         <!-- paragraf artikel -->
-        <p>
-          Yogyakarta, sering disingkat sebagai Jogja, merupakan salah satu
-          destinasi wisata paling populer di Indonesia. Terletak di Pulau Jawa,
-          kota ini kaya akan warisan budaya, sejarah, seni, dan alam yang
-          memikat. Yogyakarta menyajikan pengalaman wisata yang unik dengan
-          kombinasi kekayaan budaya, sejarah yang dalam, seni tradisional,
-          kuliner lezat, dan keindahan alam yang menakjubkan. Ini membuatnya
-          menjadi destinasi yang sangat menarik bagi para wisatawan. Dengan
-          kekayaan budaya yang mendalam, keindahan alam yang menakjubkan, dan
-          keramahan penduduk setempat, Yogyakarta tidak hanya menjadi tempat
-          untuk mengeksplorasi sejarah dan seni, tetapi juga untuk merasakan
-          kehangatan dan keindahan Indonesia secara keseluruhan. Destinasi
-          wisata ini tidak hanya memuaskan hasrat para penggemar budaya dan
-          sejarah, tetapi juga menyajikan pengalaman yang tak terlupakan bagi
-          semua jenis wisatawan.
+        <p style="text-indent: 50px;">
+          {{ destinasi_info.deskripsi_artikel }}
         </p>
       </div>
       <div class="container myarticle">
+        {% for key, attraction in destinasi_info.attractions.items() %}
+            {% if key == "attraction1" %}
         <!-- judul attraction 1 -->
-        <h1><span id="attraction1"></span>{{ destinasi_info.namaAttr1 }}</h1>
+        <h1><span id="attraction1"></span>{{ attraction.judul }}</h1>
         <!-- gambar attraction 1 -->
         <img
           class="mt-1"
           style="border-radius: 20px"
-          src="../static/img/detail_destinasi/gambarAttraction1.jpeg"
+          src="../{{ attraction.gambar }}"
           alt=""
         />
         <div class="row flex-column flex-md-row justify-content-between">
@@ -482,17 +480,7 @@
           <!-- deskripsi attraction 1 -->
           <div class="col-md-8 column">
             <p class="parag">
-              Jalan Malioboro adalah jantung pusat kota Yogyakarta dan merupakan
-              destinasi wisata yang sangat terkenal di Indonesia. Jalan ini
-              tidak hanya menjadi pusat perbelanjaan, tetapi juga merangkul
-              kekayaan budaya dan sejarah kota. Di sepanjang Jalan Malioboro,
-              Anda akan menemukan beragam toko tradisional, pedagang kaki lima,
-              dan penjual khas Jogja yang menawarkan berbagai barang kerajinan
-              tangan, batik, pakaian, dan suvenir. Selain belanja, Jalan
-              Malioboro juga dikenal sebagai tempat untuk menikmati kuliner khas
-              Yogyakarta. Warung dan pedagang makanan khas Jogja tersebar di
-              sepanjang jalan, menawarkan pengalaman kuliner yang autentik,
-              seperti gudeg, bakmi, dan makanan khas lainnya.
+              {{ attraction.deskripsi_attraction1}}
             </p>
           </div>
 
@@ -514,15 +502,19 @@
         </div>
         <a style="color: #ffc800" href="#">Pesan Tiket >></a>
       </div>
+              {% endif %}
+          {% endfor %}
       <br />
       <div class="container myarticle">
+        {% for key, attraction in destinasi_info.attractions.items() %}
+            {% if key == "attraction2" %}
         <!-- judul attraction 2 -->
-        <h1><span id="attraction2"></span>{{ destinasi_info.namaAttr2 }}</h1>
+        <h1><span id="attraction2"></span>{{ attraction.judul }}</h1>
         <!-- gambar attraction 2 -->
         <img
           class="mt-1"
           style="border-radius: 20px"
-          src="../static/img/detail_destinasi/gambarAttraction2.jpg"
+          src="../{{ attraction.gambar }}"
           alt=""
         />
         <div class="row flex-column flex-md-row justify-content-between">
@@ -530,17 +522,7 @@
           <!-- deskripsi attraction 2 -->
           <div class="col-md-8 column">
             <p class="parag">
-              Candi Prambanan adalah salah satu situs warisan budaya dunia yang
-              terletak di Yogyakarta, Indonesia. dikelilingi oleh taman yang
-              hijau dan pohon-pohon yang memberikan suasana yang sejuk dan
-              damai. Keindahan alam sekitar membuat pengalaman berkunjung
-              semakin menyenangkan. Ini adalah kompleks candi Hindu terbesar di
-              Indonesia dan dianggap sebagai salah satu destinasi wisata yang
-              paling menarik untuk dikunjungi. Candi Prambanan tidak hanya
-              menawarkan keindahan arsitektur kuno, tetapi juga memperkaya
-              pengalaman wisatawan dengan budaya, sejarah, dan kespiritualan.
-              Keunikan dan keindahan situs ini menjadikannya destinasi wisata
-              yang sangat menarik di Indonesia.
+              {{ attraction.deskripsi_attraction2}}
             </p>
           </div>
 
@@ -579,15 +561,19 @@
         </div>
         <a style="color: #ffc800" href="#">Pesan Tiket >></a>
       </div>
+      {% endif %}
+          {% endfor %}
       <br />
       <div class="container myarticle">
+        {% for key, attraction in destinasi_info.attractions.items() %}
+            {% if key == "attraction3" %}
         <!-- judul attraction 3 -->
-        <h1><span id="attraction3"></span>{{ destinasi_info.namaAttr3 }}</h1>
+        <h1><span id="attraction2"></span>{{ attraction.judul }}</h1>
         <!-- gambar attraction 3 -->
         <img
           class="mt-1"
           style="border-radius: 20px"
-          src="../static/img/detail_destinasi/gambarAttraction3.jpg"
+          src="../{{ attraction.gambar }}"
           alt=""
         />
         <div class="row flex-column flex-md-row justify-content-between">
@@ -595,19 +581,7 @@
           <div class="col-md-8 column">
             <!-- deskripsi attraction 3 -->
             <p class="parag">
-              Pantai Parangtritis adalah salah satu destinasi wisata yang
-              terkenal di Yogyakarta, Indonesia. Berlokasi sekitar 27 kilometer
-              selatan Yogyakarta, mempesona pengunjung dengan keindahan alamnya
-              yang memukau. Pantai ini memiliki garis pantai yang panjang dengan
-              pasir putih yang lembut dan ombak Samudera Hindia yang memukau.
-              Pemandangan matahari terbenam di atas laut di sini juga terkenal
-              sebagai salah satu yang terbaik di Yogyakarta. Pantai Parangtritis
-              menawarkan kombinasi indah antara panorama laut yang menakjubkan,
-              pasir pantai yang luas, dan nuansa mistis yang kental. Pantai
-              Parangtritis menyajikan pengalaman wisata yang lengkap dengan
-              kombinasi keindahan alam, nilai budaya, dan kegiatan rekreasi.
-              Destinasi ini menarik wisatawan lokal maupun internasional yang
-              ingin mengeksplorasi kekayaan alam dan budaya Indonesia.
+              {{ attraction.deskripsi_attraction3}}
             </p>
           </div>
 
@@ -646,6 +620,8 @@
         </div>
         <a style="color: #ffc800" href="#">Pesan Tiket >></a>
       </div>
+      {% endif %}
+          {% endfor %}
     </section>
     <hr />
 
@@ -682,9 +658,6 @@
         const inputAttraction = myModal.querySelector(".modal-body .attractionGive");
         inputHargaTiket.value = hargaTiket;
         inputAttraction.value = attraction;
-        // const inputJumlahTiket = myModal.querySelector(".modal-body .jumlahTiket");
-        // const hitungHargaTiket = hargaTiket * inputJumlahTiket;
-        // totalHargaTiket.value = hitungHargaTiket;
       });
     </script>
   </body>
