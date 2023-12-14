@@ -40,7 +40,6 @@ def home():
       user_info = db.user.find_one({"email": payload["id"]})
       is_admin = user_info.get("role") == "admin"
       logged_in = True
-      print(user_info)
       return render_template('index.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
   except jwt.ExpiredSignatureError:
       msg = 'Your token has expired'
@@ -62,9 +61,9 @@ def login_user():
         
         result = db.user.find_one(
           {
-            'email': email,
-            'password': pw_hash
-          }
+           'email': email,
+           'password': pw_hash
+           }
         )
         if result:
             payload = {
@@ -138,7 +137,6 @@ def destinations():
       user_info = db.user.find_one({"email": payload["id"]})
       is_admin = user_info.get("role") == "admin"
       logged_in = True
-      print(user_info)
       return render_template('destinations.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
   except jwt.ExpiredSignatureError:
       msg = 'Your token has expired'
@@ -151,43 +149,47 @@ def add_destinasi():
     data = request.form
     
     nama_destinasi = data['namaDestinasi']
+    nama_destinasi_noSpace = nama_destinasi.replace(" ", "")
     card_destinasi = request.files['gambarCardDestinasi']
     extension_card = card_destinasi.filename.split('.')[-1]
-    file_name_card = f'static/card/gambarCard-{nama_destinasi}.{extension_card}'
+    file_name_card = f'static/card/gambarCard-{nama_destinasi_noSpace}.{extension_card}'
     card_destinasi.save(file_name_card)
   
     judul_attraction1 = data['judulAttraction1']
+    judul_attraction1_noSpace = judul_attraction1.replace(" ", "")
     subtitle_attraction1 = data['subtitleAttraction1']
     harga_attraction1 = int(data['hargaAttraction1'])
     gambar_attraction1 = request.files['gambarAttraction1']
     deskripsi_attraction1 = data['deskripsiAttraction1']
     extension_attr1 = gambar_attraction1.filename.split('.')[-1]
-    file_name_attr1 = f'static/attraction/gambar-{judul_attraction1}.{extension_attr1}'
+    file_name_attr1 = f'static/attraction/gambar-{judul_attraction1_noSpace}.{extension_attr1}'
     gambar_attraction1.save(file_name_attr1)
     
     judul_attraction2 = data['judulAttraction2']
+    judul_attraction2_noSpace = judul_attraction2.replace(" ", "")
     subtitle_attraction2 = data['subtitleAttraction2']
     harga_attraction2 = int(data['hargaAttraction2'])
     gambar_attraction2 = request.files['gambarAttraction2']
     deskripsi_attraction2 = data['deskripsiAttraction2']
     extension_attr2 = gambar_attraction2.filename.split('.')[-1]
-    file_name_attr2 = f'static/attraction/gambar-{judul_attraction2}.{extension_attr2}'
+    file_name_attr2 = f'static/attraction/gambar-{judul_attraction2_noSpace}.{extension_attr2}'
     gambar_attraction2.save(file_name_attr2)
     
     judul_attraction3 = data['judulAttraction3']
+    judul_attraction3_noSpace = judul_attraction3.replace(" ", "")
     subtitle_attraction3 = data['subtitleAttraction3']
     harga_attraction3 = int(data['hargaAttraction3'])
     gambar_attraction3 = request.files['gambarAttraction3']
     deskripsi_attraction3 = data['deskripsiAttraction3']
     extension_attr3 = gambar_attraction3.filename.split('.')[-1]
-    file_name_attr3 = f'static/attraction/gambar-{judul_attraction3}.{extension_attr3}'
+    file_name_attr3 = f'static/attraction/gambar-{judul_attraction3_noSpace}.{extension_attr3}'
     gambar_attraction3.save(file_name_attr3)
     
     quotes = data['quotes']
     
     gambar_artikel = request.files['gambarArtikel']
     extension_artikel = gambar_artikel.filename.split('.')[-1]
-    file_name_artikel = f'static/artikel/gambar-{nama_destinasi}.{extension_artikel}'
+    file_name_artikel = f'static/artikel/gambar-{nama_destinasi_noSpace}.{extension_artikel}'
     gambar_artikel.save(file_name_artikel)
     deskripsi_artikel = data['deskripsiArtikel']
 
@@ -241,7 +243,7 @@ def manajemen_destinasi():
       if is_admin:
         return render_template('manajemen_destinasi.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
       else:
-        return render_template('login.html')
+        return redirect(url_for('home'))
   except jwt.ExpiredSignatureError:
       msg = 'Your token has expired'
   except jwt.exceptions.DecodeError:
@@ -255,53 +257,30 @@ def get_destinasi():
   for destinasi_info in destinasi:
       destinasi_list.append({
           'id': str(destinasi_info['_id']),
-          'name': destinasi_info['name'],
-          'description': destinasi_info['description'],
-          'image_wisata' : destinasi_info['image_wisata'],
-          'total_tickets': destinasi_info['total_tickets']
+          'nama_destinasi': destinasi_info['nama_destinasi'],
+          'card_destinasi': destinasi_info['card_destinasi']
       })
   return jsonify(destinasi_list), 200
 
-@app.route('/detail_destinasi/<title>', methods=['GET'])
-def detail_destinasi(title):
-  user_info = {
-    'name': "Rifqi Khawarij"
-  }
-  destinasi_info = {
-    "nama_destinasi": "Banda Neira",
-    "card_destinasi": "static/card/gambarCard-Yogyakarta.jpg",
-    "attractions":{
-     "attraction1":{
-        "judul": "Pantai",
-        "subtitle": "pantai di banda",
-        "harga": {"$numberInt":"50000"},
-        "gambar": "static/attraction/gambar-Pantai.png",
-        "deskripsi_attraction1": "pantai ini ada di banda"
-     },
-     "attraction2":{
-        "judul": "gunung",
-        "subtitle": "gunung di banda",
-        "harga": {"$numberInt":"35000"},
-        "gambar": "static/attraction/gambar-gunung.png",
-        "deskripsi_attraction2": "gunung ini ada di banda"
-     },
-     "attraction3":{
-        "judul":"hutan",
-        "subtitle":"hutan di banda",
-        "harga":{"$numberInt":"1000"},
-        "gambar":"static/attraction/gambar-hutan.png",
-        "deskripsi_attraction3":"hutan ini ada di banda"
-     }
-    },
-    "quotes":"the defitions of banda neira",
-    "gambar_artikel":"static/artikel/gambar-Banda Neira.png",
-    "deskripsi_artikel":"banda neira suatu tempat di banda",
-    "tanggal_tambah":"2023-12-13 03:15:26"
-  }
-  
-  logged_in = True
-  is_admin = False
-  return render_template('detail_destinasi.html', user_info=user_info, destinasi_info=destinasi_info, logged_in=logged_in, is_admin=is_admin)
+@app.route('/detail_destinasi/<destinasi_id>', methods=['GET'])
+def detail_destinasi(destinasi_id):
+  token_receive = request.cookies.get(TOKEN_KEY)
+  try:
+      payload =jwt.decode(
+          token_receive,
+          SECRET_KEY,
+          algorithms=['HS256']
+      )
+      user_info = db.user.find_one({"email": payload["id"]})
+      is_admin = user_info.get("role") == "admin"
+      logged_in = True
+      destinasi_info = db.destinasi.find_one({'_id': ObjectId(destinasi_id)})
+      return render_template('detail_destinasi.html', destinasi_info=destinasi_info, user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+  except jwt.ExpiredSignatureError:
+      msg = 'Your token has expired'
+  except jwt.exceptions.DecodeError:
+      msg = 'There was a problem logging you in'
+  return render_template('login.html', msg=msg)
   
 @app.route('/pesantiket', methods=['POST'])
 def pesantiket():
@@ -369,7 +348,7 @@ def beranda_admin():
       if is_admin:
         return render_template('beranda_admin.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
       else:
-        return render_template('login.html')
+        return render_template('index.html')
   except jwt.ExpiredSignatureError:
       msg = 'Your token has expired'
   except jwt.exceptions.DecodeError:
@@ -511,8 +490,6 @@ def delete_user(user_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-
 @app.route('/profile_admin', methods=['GET'])
 def profile_admin():
   token_receive = request.cookies.get(TOKEN_KEY)
@@ -535,8 +512,8 @@ def profile_admin():
       msg = 'There was a problem logging you in'
   return render_template('login.html', msg=msg)
 
-@app.route('/profile_User', methods=['GET'])
-def get_profil_user():
+@app.route('/profile_User/<id>', methods=['GET'])
+def get_profil_user(id):
   token_receive = request.cookies.get(TOKEN_KEY)
   try:
       payload =jwt.decode(
