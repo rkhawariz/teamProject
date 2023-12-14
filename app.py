@@ -41,7 +41,7 @@ def home():
       is_admin = user_info.get("role") == "admin"
       logged_in = True
       print(user_info)
-      return render_template('manajemen_destinasi.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+      return render_template('index.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
   except jwt.ExpiredSignatureError:
       msg = 'Your token has expired'
   except jwt.exceptions.DecodeError:
@@ -62,9 +62,9 @@ def login_user():
         
         result = db.user.find_one(
           {
-           'email': email,
-           'password': pw_hash
-           }
+            'email': email,
+            'password': pw_hash
+          }
         )
         if result:
             payload = {
