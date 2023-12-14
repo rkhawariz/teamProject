@@ -106,10 +106,13 @@ def register():
                 user_data = {
                     'id': user_id,
                     'nama': nama,
+                    'username': "",
                     'email': email,
                     'password': password_hash,
                     'role': 'user',
-                    'foto_profile': '',
+                    'status': 'active',
+                    'file_foto_profile': "",
+                    'foto_profile': 'static/profile/profile_placeholder.png',
                     'tanggal_register': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
 
@@ -419,7 +422,6 @@ def manajemen_tiket():
     return render_template('login.html', msg=msg)
 
 
-
 @app.route('/ulasan_rekomendasi', methods=['GET'])
 def ulasan_rekomendasi():
   token_receive = request.cookies.get(TOKEN_KEY)
@@ -534,7 +536,7 @@ def profile_admin():
   return render_template('login.html', msg=msg)
 
 @app.route('/profile_User', methods=['GET'])
-def profil_user():
+def get_profil_user():
   token_receive = request.cookies.get(TOKEN_KEY)
   try:
       payload =jwt.decode(
@@ -545,8 +547,50 @@ def profil_user():
       user_info = db.user.find_one({"email": payload["id"]})
       is_admin = user_info.get("role") == "admin"
       logged_in = True
-      print(user_info)
       return render_template('profile_User.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+  except jwt.ExpiredSignatureError:
+      msg = 'Your token has expired'
+  except jwt.exceptions.DecodeError:
+      msg = 'There was a problem logging you in'
+  return render_template('login.html', msg=msg)
+  
+
+@app.route('/profile_User', methods=['POST'])
+def profil_User():
+  token_receive = request.cookies.get(TOKEN_KEY)
+  try:
+      payload =jwt.decode(
+          token_receive,
+          SECRET_KEY,
+          algorithms=['HS256']
+      )      
+      emailBefore = payload.get('id')
+      
+      nama = request.form['nama']
+      username = request.form['username']
+      email = request.form['email']
+      password = request.form['password']
+      password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+      # file = request.files['profileImage']
+      # extension = file.filename.split('.')[-1]
+      # file_path = f'static/profile/{username}.{extension}'
+      # print(file_path)
+      # file.save(file_path)
+      
+      data_baru = {
+            'nama' : nama,
+            'username' : username,
+            'email': email,
+            'password': password_hash,
+            # 'foto_profile': file_path
+        }
+            
+      db.user.update_one(
+            {'email' : emailBefore},
+            {'$set' : data_baru}
+      )
+      
+      return redirect(url_for('home'))
   except jwt.ExpiredSignatureError:
       msg = 'Your token has expired'
   except jwt.exceptions.DecodeError:
