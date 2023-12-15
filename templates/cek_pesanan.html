@@ -223,7 +223,7 @@
                                 <th scope="col">Status</th>
                                 <th scope="col">Beri Rating dan Ulasan</th>
                                 <th scope="col">E-Ticket</th>
-                                <th scope="col"></th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -232,6 +232,7 @@
                                 <th scope="row">{{ loop.index }}</th>
                                 <td>{{ ticket['namaAttraction'] }}</td>
                                 <td>{{ ticket['jumlahTiket'] }}</td>
+                                <td>{{ ticket['hargaTiket'] }}</td>
                                 <td>{{ ticket['totalHargaTiket'] }}</td>
                                 <td><input type="file" /></td>
                                 <td>{{ ticket['status'] }}</td>
