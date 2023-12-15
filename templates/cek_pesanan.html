@@ -158,11 +158,11 @@
                     <a class="dropdown-toggle nav-item nav-link" type="button" id="usermenu" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline small">{{ user_info.nama }}</span>
-                        <img class="img-profile rounded-circle" src="../static/img/profile_placeholder.png" />
+                        <img class="img-profile rounded-circle" src="../{{ user_info.foto_profile }}" />
                     </a>
                     <ul class="dropdown-menu submenu dropdown-menu-dark">
                         <li>
-                            <a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2"></i>Profile</a>
+                            <a class="dropdown-item" href="/profile_User/{{ user_info.nama }}"><i class="fas fa-user fa-sm fa-fw mr-2"></i>Profile</a>
                         </li>
 
                         <!-- {% if is_admin %} -->
@@ -172,7 +172,7 @@
                         </li>
                         <!-- {% else %} -->
                         <li>
-                            <a class="dropdown-item" href="/cek_pesanan"><i
+                            <a class="dropdown-item" href="/cek_pesanan/{{ user_info.nama }}"><i
                                     class="fas fa-ticket fa-sm fa-fw mr-2"></i>Cek
                                 Pesanan</a>
                         </li>

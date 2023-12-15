@@ -398,7 +398,7 @@ def beranda_admin():
                 is_admin=is_admin,
             )
         else:
-            return render_template("index.html", user_info=user_info, logged_in=logged_in)
+            return redirect(url_for('home'))
     except jwt.ExpiredSignatureError:
         msg = "Your token has expired"
     except jwt.exceptions.DecodeError:
