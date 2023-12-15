@@ -113,6 +113,15 @@
                 margin-right: 5px;
             }
         }
+
+        @media (max-width: 767px) {
+            .modal-footer .btn {
+                width: 490px;
+                height: 50px;
+                padding: 5px 15px;
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 
@@ -218,24 +227,38 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for ticket in tiket_list %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Pulau Komodo</td>
-                                <td>5</td>
-                                <td>RP. 25.000</td>
-                                <td>RP. 125.000</td>
+                                <th scope="row">{{ loop.index }}</th>
+                                <td>{{ ticket['namaAttraction'] }}</td>
+                                <td>{{ ticket['jumlahTiket'] }}</td>
+                                <td>{{ ticket['totalHargaTiket'] }}</td>
                                 <td><input type="file" /></td>
-                                <td>Pending</td>
-                                <td><button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#ratingModal1">Beri Rating dan Ulasan</button></td>
+                                <td>{{ ticket['status'] }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#ratingModal{{ loop.index }}">
+                                        Beri Rating dan Ulasan
+                                    </button>
+                                </td>
                                 <td>
                                     <button class="custom-btn">
                                         <i class="fas fa-download"></i> Download PDF
                                     </button>
                                 </td>
-                                <td><button type="submit" class="btn btn-primary">Submit</button></td>
+                                <td>
+                                    <form action="/cek_pesanan/{{ nama }}" method="post">
+                                        <!-- Ganti 'namaAttraction', 'jumlahTiket', dan sebagainya sesuai dengan keys yang sesuai -->
+                                        <input type="hidden" name="attractionGive"
+                                            value="{{ ticket['namaAttraction'] }}">
+                                        <input type="hidden" name="jumlahTiket" value="{{ ticket['jumlahTiket'] }}">
+                                        <!-- Tambahkan hidden input lainnya sesuai kebutuhan -->
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </td>
                             </tr>
-                            <tr>
+                            {% endfor %}
+                            <!-- <tr>
                                 <th scope="row">2</th>
                                 <td>Istano Basa Pagaruyung</td>
                                 <td>3</td>
@@ -268,7 +291,7 @@
                                     </button>
                                 </td>
                                 <td><button type="submit" class="btn btn-primary">Submit</button></td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>

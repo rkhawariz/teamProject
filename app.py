@@ -61,9 +61,9 @@ def login_user():
         
         result = db.user.find_one(
           {
-           'email': email,
-           'password': pw_hash
-           }
+            'email': email,
+            'password': pw_hash
+          }
         )
         if result:
             payload = {
@@ -302,7 +302,7 @@ def pesantiket():
       "e-ticket": "",
     }
     db.tiket.insert_one(doc)
-    return render_template('cek_pesanan.html')
+    return redirect(url_for('home'))
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -324,14 +324,39 @@ def about():
       msg = 'There was a problem logging you in'
   return render_template('about.html', msg=msg)
   
-@app.route('/cek_pesanan')
-def cek_pesanan():
-  user_info = {
-    'name': "Cindi Widiawati"
-  }
-  logged_in = True
-  is_admin = False
-  return render_template('cek_pesanan.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin)
+@app.route('/cek_pesanan/<nama>')
+def cek_pesanan(nama):
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        user_info = db.user.find_one({"email": payload["id"]})
+        is_admin = user_info.get("role") == "admin"
+        logged_in = True
+
+        tiket_list = []
+        tiket_info = db.tiket.find({"namaPemesan": nama})
+        
+        for ticket in tiket_info:
+            tiket_data = {
+                'namaAttraction': ticket['namaAttraction'],
+                'jumlahTiket': ticket['jumlahTiket'],
+                'totalHargaTiket': ticket['totalHargaTiket'],
+                'buktiPembayaran': ticket['buktiPembayaran'],
+                'status': ticket['status'],
+                'e-ticket': ticket['e-ticket'],
+            }
+            tiket_list.append(tiket_data)
+
+        return render_template('cek_pesanan.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin, tiket_list=tiket_list)
+    except jwt.ExpiredSignatureError:
+        msg = 'Your token has expired'
+    except jwt.exceptions.DecodeError:
+        msg = 'There was a problem logging you in'
+    return render_template('login.html', msg=msg)
 
 @app.route('/beranda_admin', methods=['GET'])
 def beranda_admin():
@@ -387,18 +412,17 @@ def manajemen_tiket():
                         'status': tiket['status'],
                     }
                     tiket_list.append(tiket_info)
-
                 return render_template('manajemen_tiket.html', user_info=user_info, logged_in=logged_in, is_admin=is_admin, data_tiket=tiket_list)
             else:
-                return render_template('login.html')
+                return render_template('manajemen_tiket.html')
         else:
-            return render_template('login.html', msg='User not found')
+            return render_template('manajemen_tiket.html', msg='User not found')
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired'
     except jwt.exceptions.DecodeError:
         msg = 'There was a problem logging you in'
     
-    return render_template('login.html', msg=msg)
+    return render_template('manajemen_tiket.html', msg=msg)
 
 
 @app.route('/ulasan_rekomendasi', methods=['GET'])
