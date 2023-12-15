@@ -45,7 +45,8 @@
         body {
             display: flex;
             align-items: center;
-            /* background-color: #f5f5f5; */
+            overflow: hidden;
+            /* Menyembunyikan scrollbar */
         }
 
         .form-signin {
@@ -53,6 +54,7 @@
             max-width: 330px;
             padding: 15px;
             margin: auto;
+            margin-top: 100px;
         }
 
         .form-signin .checkbox {
@@ -73,6 +75,12 @@
             margin-bottom: 10px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+        }
+
+        @media (max-width: 576px) {
+            .background-image img {
+                display: none;
+            }
         }
     </style>
 
@@ -143,12 +151,12 @@
 
 <body class="text-center">
     <div class="background-image">
-        <img src="/static/img/myservices/rinjani.jpg" alt="" width="1000" height="785" style="filter: brightness(85%);">
+        <img src="/static/img/myservices/rinjani.jpg" alt="" width="900" height="598" style="filter: brightness(85%);">
     </div>
     <main class="form-signin">
         <form id="signupForm">
-            <img src="/static/img/logo.svg" alt="" width="300" height="300" style="margin-top: -90px;">
-            <h1 class="h3 fw-normal" style="color: #e7e2e2; margin-top: -90px;">Signup now!</h1>
+            <img src="/static/img/logo.svg" alt="" width="300" height="300" style="margin-top: -210px;">
+            <h1 class="h3 fw-normal" style="color: #e7e2e2; margin-top: -120px;">Signup now!</h1>
             <p class="bg-success" style="color: #f5f5f5; border-radius: 10px;">It's free and takes a minutes</p>
 
             <div class="input-group mb-3">
@@ -174,7 +182,7 @@
                 <small style="color: #f5f5f5;">Already have an account? <a href="/login">Login Here</a></small>
             </div>
         </form>
-        <p class="mt-5 mb-3" style="color: #f5f5f5;">&copy; TRIP WONDERS | 2023</p>
+        <p class="mt-3" style="color: #f5f5f5;">&copy; TRIP WONDERS | 2023</p>
     </main>
 </body>
 
