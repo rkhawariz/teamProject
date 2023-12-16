@@ -27,24 +27,16 @@
             // Update the displayed data
             document.getElementById('formEditEmail').value = newEmail;
             document.getElementById('password').value = newPassword ? "********" : document.getElementById(
-                    'password')
-                .value;
+                'password').value;
             // Update the image source (simulated)
             document.querySelector('.card img').src = newProfileImage ? 'path/to/new-image.jpg' :
                 'path/to/profile-image.jpg';
-
-            // SweetAlert for successful update
-            Swal.fire({
-                title: 'Changes Saved!',
-                text: 'Your profile has been updated.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
         }
     </script>
 </head>
 
 <body>
+    <!-- Your existing body content -->
     {% include 'header.html' %}
 
     <div class="container mt-5">
@@ -89,7 +81,7 @@
                     </div>
                     <div class="modal-body">
                         <!-- Form for Editing -->
-                        <form method="POST" action="/profile_User">
+                        <form method="POST" action="/profile_User" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="editNama">Nama</label>
                                 <input type="text" class="form-control" id="editNama" name="nama"
@@ -122,6 +114,7 @@
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

@@ -609,6 +609,8 @@ def get_profil_user(nama):
     return render_template("login.html", msg=msg)
 
 
+from flask import redirect, url_for
+
 @app.route("/profile_User", methods=["POST"])
 def profil_User():
     token_receive = request.cookies.get(TOKEN_KEY)
@@ -621,23 +623,27 @@ def profil_User():
         email = request.form["email"]
         password = request.form["password"]
         password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
-        # file = request.files['profileImage']
-        # extension = file.filename.split('.')[-1]
-        # file_path = f'static/profile/{username}.{extension}'
-        # print(file_path)
-        # file.save(file_path)
+
+        # Menggunakan request.files untuk mendapatkan file gambar yang diunggah
+        if "profileImage" in request.files:
+            profile_image = request.files["profileImage"]
+            # Simpan gambar ke direktori /static/img/profile_user/
+            if profile_image.filename != '':
+                image_path = f'static/img/profile_user/{profile_image.filename}'
+                profile_image.save(image_path)
+                foto_profile = image_path
 
         data_baru = {
             "nama": nama,
             "username": username,
             "email": email,
             "password": password_hash,
-            # 'foto_profile': file_path
+            "foto_profile": foto_profile if 'foto_profile' in locals() else '/static/profile/profile_placeholder.png'
         }
 
         db.user.update_one({"email": emailBefore}, {"$set": data_baru})
 
-        return redirect(url_for("home"))
+        return redirect(url_for("home"))  # Redirect ke halaman yang sesuai setelah update
     except jwt.ExpiredSignatureError:
         msg = "Your token has expired"
     except jwt.exceptions.DecodeError:
