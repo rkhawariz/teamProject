@@ -288,15 +288,13 @@ def edit_destinasi(id):
             flash(f'Gagal. Error: {str(e)}', 'danger')
         return redirect(url_for('manajemen_destinasi'))
 
-@app.route('/delete_destinasi/<id>')
+@app.route('/delete_destinasi/<id>', methods=['DELETE'])
 def delete_destinasi(id):
     try:
-        db.destinasi.delete_one({'_id': ObjectId(id)})
-        flash('Berhasil menghapus destinasi!', 'success')
+        db.destinasi.delete_one({"_id": ObjectId(id)})
+        return jsonify({"message": "berhasil"}), 200
     except Exception as e:
-        flash(f'Gagal menghapus destinasi. Error: {str(e)}', 'danger')
-
-    return redirect(url_for('manajemen_destinasi'))
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/listdestinasi", methods=["GET"])

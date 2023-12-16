@@ -10,6 +10,8 @@
       href="../static/img/myservices/logo.png"
     />
     <title>Trip Wonder | Manajemen Destinasi</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- bootstrap -->
     <link
@@ -148,7 +150,6 @@
         }
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -194,6 +195,39 @@
             });
         });
       });
+
+      function confirmHapus(id) {
+        Swal.fire({
+          title: "Apakah kamu yakin ingin menghapus destinasi?",
+          text: "Inputnya capek loh",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, hapus!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`/delete_destinasi/${id}`, {
+              method: "DELETE",
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                Swal.fire(
+                  "Terhapus!",
+                  "Destinasi berhasil dihapus",
+                  "success"
+                ).then(() => {
+                  location.reload();
+                });
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                Swal.fire("Error!", "terdapat error", "error");
+              });
+          }
+        });
+      }
     </script>
   </head>
 
@@ -567,12 +601,18 @@
                         <i class="fas fa-edit"></i>
                       </button>
                       |
+                      <button
+                        class="btn btn-danger btn-sm"
+                        onclick="confirmHapus('{{ dest._id|string }}')"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
 
-                      <a
+                      <!-- <a
                         class="btn btn-danger btn-sm"
                         href="{{ url_for('delete_destinasi', id=dest._id|string) }}"
                         ><i class="fas fa-trash-alt"></i
-                      ></a>
+                      ></a> -->
 
                       <!-- modal start -->
                       <div
@@ -681,17 +721,15 @@
     </div>
     <div class="mt-5">{% include 'footer.html' %}</div>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
+    {% with messages = get_flashed_messages() %} {% if messages %}
     <script>
-        Swal.fire({
-            icon: '{{ "success" if messages[0][1] == "success" else "success" }}',
-            title: 'success',
-            text: '{{ messages[0] }}',
-        });
+      Swal.fire({
+        icon: '{{ "success" if messages[0][1] == "success" else "success" }}',
+        title: "success",
+        text: "{{ messages[0] }}",
+      });
     </script>
-  {% endif %}
-{% endwith %}
+    {% endif %} {% endwith %}
     <!-- bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
