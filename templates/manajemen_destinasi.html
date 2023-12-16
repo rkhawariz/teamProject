@@ -148,10 +148,53 @@
         }
       }
     </style>
-
-    <!-- Sweet Alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            fetch('/add_destinasi', {
+                method: 'POST',
+                body: new FormData(form),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: 'Sukses!',
+                        text: data.msg,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed || result.isDismissed) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan. Silakan coba lagi.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan. Silakan coba lagi.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        });
+    });
+
       // Menggunakan event delegation untuk menangani event pada banyak tombol delete
       document.addEventListener("click", function (e) {
         if (e.target.classList.contains("delete-btn")) {

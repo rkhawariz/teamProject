@@ -237,7 +237,7 @@ def add_destinasi():
         "tanggal_tambah": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
     db.destinasi.insert_one(destinasi_data)
-    return render_template("manajemen_destinasi.html")
+    return jsonify({"status": "success", "msg": "Berhasil Menambahkan Destinasi Baru!"})
 
 
 @app.route("/manajemen_destinasi")
@@ -352,7 +352,11 @@ def cek_pesanan(nama):
         user_info = db.user.find_one({"email": payload["id"]})
         is_admin = user_info.get("role") == "admin"
         logged_in = True
-
+        if not user_info:
+            return redirect('/forbidden')
+        logged_in = True
+        if user_info['nama'] != nama:
+            return redirect('/forbidden')
         tiket_list = []
         tiket_info = db.tiket.find({"namaPemesan": nama})
 
@@ -577,14 +581,19 @@ def profile_admin():
     return render_template("login.html", msg=msg)
 
 
-@app.route("/profile_User/<id>", methods=["GET"])
-def get_profil_user(id):
+@app.route("/profile_User/<nama>", methods=["GET"])
+def get_profil_user(nama):
     token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         user_info = db.user.find_one({"email": payload["id"]})
         is_admin = user_info.get("role") == "admin"
         logged_in = True
+        if not user_info:
+            return redirect('/forbidden')
+        logged_in = True
+        if user_info['nama'] != nama:
+            return redirect('/forbidden')
         return render_template(
             "profile_User.html",
             user_info=user_info,
@@ -632,6 +641,10 @@ def profil_User():
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
+
+@app.route('/forbidden')
+def forbidden():
+    return render_template('error.html')
 
 
 if __name__ == "__main__":

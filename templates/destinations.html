@@ -65,6 +65,38 @@
         background-image: url(../static/img/background-navbar.png);
       }
     </style>
+    <script>
+      $(document).ready(function () {
+        listingDestinasi();
+      });
+
+      function listingDestinasi() {
+        $.ajax({
+          url: "/listdestinasi",
+          type: "GET",
+          dataType: "json",
+          success: function (response) {
+            let listDestinasi = response;
+            $("#destinasi-list").empty();
+            for (let i = 0; i < listDestinasi.length; i++) {
+              let destinasi_info = listDestinasi[i];
+              let temp_html =
+                '<div class="col mylist-item"><a href="/detail_destinasi/' +
+                destinasi_info.id +
+                '"><div class="card border-light myratio rounded-4" style="width: 12.6rem; height: 17rem"><img src="../' +
+                destinasi_info.card_destinasi +
+                '" class="card-img img-fluid h-100 w-100" alt="..." /> <div class="overlay-text p-1"><h6>' +
+                destinasi_info.nama_destinasi +
+                "</h6></div></div></a></div>";
+              $("#destinasi-list").append(temp_html);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.log(error);
+          },
+        });
+      }
+    </script>
   </head>
   <body>
     <!-- Navbar start-->
@@ -130,7 +162,9 @@
             </a>
             <ul class="dropdown-menu submenu dropdown-menu-dark">
               <li>
-                <a class="dropdown-item" href="/profile_User/{{ user_info.nama }}"
+                <a
+                  class="dropdown-item"
+                  href="/profile_User/{{ user_info.nama }}"
                   ><i class="fas fa-user fa-sm fa-fw mr-2"></i>Profile</a
                 >
               </li>
@@ -144,7 +178,9 @@
               </li>
               <!-- {% else %} -->
               <li>
-                <a class="dropdown-item" href="/cek_pesanan/{{ user_info.nama }}"
+                <a
+                  class="dropdown-item"
+                  href="/cek_pesanan/{{ user_info.nama }}"
                   ><i class="fas fa-ticket fa-sm fa-fw mr-2"></i>Cek Pesanan</a
                 >
               </li>
@@ -205,222 +241,17 @@
           class="row row-cols-1 row-cols-md-3 row-cols-2 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 g-4"
           id="destinasi-list"
         >
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/jakarta.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Jakarta</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/bandung.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Bandung</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/rajaAmpat.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Raja Ampat</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/situbondo.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Situbondo</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/bali.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Bali</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/magelang.png"
-                  class="card-img img-fluid h-100 w-100"
-                  style="height: 100%"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Magelang</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/yogyakarta.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Yogyakarta</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/banyuwangi.png"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Banyuwangi</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1635608617653-1badde9f5530?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8a2VwdWxhdWFuJTIwcmlhdXxlbnwwfHwwfHx8MA%3D%3D"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Riau</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/malang.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Probolinggo</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/lombok.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Lombok</h6>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col mylist-item">
-            <a href="">
-              <div
-                class="card border-light myratio rounded-4"
-                style="width: 12.6rem; height: 17rem"
-              >
-                <img
-                  src="../static/img/kota/ntt.jpg"
-                  class="card-img img-fluid h-100 w-100"
-                  alt="..."
-                />
-                <div class="overlay-text p-1">
-                  <h6>Nusa Tenggara Timur</h6>
-                </div>
-              </div>
-            </a>
-          </div>
+          <!-- Cities-->
         </div>
       </div>
     </section>
-    <!-- Cities end -->
 
     <section class="page-section quote mt-5">
       <div class="layar-dalam is-mobile" style="font-weight: bold">
         <p>"Kami beragam dalam budaya tetapi dalam satu jalur tunggal.</p>
       </div>
     </section>
-    
+
     {% include 'footerUser.html' %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
