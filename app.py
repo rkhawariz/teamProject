@@ -6,7 +6,7 @@ from pymongo import MongoClient
 import jwt
 from datetime import datetime, timedelta
 import hashlib
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from bson import ObjectId
 
@@ -16,6 +16,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["UPLOAD_FOLDER"] = "./static/profile_pics"
 
 SECRET_KEY = "MERZY"
+app.secret_key = "triowonders"
 
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
@@ -249,19 +250,53 @@ def manajemen_destinasi():
         is_admin = user_info.get("role") == "admin"
         logged_in = True
         if is_admin:
+            destinasi_list = db.destinasi.find()
+
             return render_template(
                 "manajemen_destinasi.html",
                 user_info=user_info,
                 logged_in=logged_in,
                 is_admin=is_admin,
+                destinasi=destinasi_list,
             )
         else:
-            return redirect(url_for("home"))
+            return render_template("login.html")
     except jwt.ExpiredSignatureError:
         msg = "Your token has expired"
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
+
+@app.route('/edit_destinasi/<id>', methods=['POST'])
+def edit_destinasi(id):
+        destinasi = db.destinasi.find_one({'_id': ObjectId(id)})
+
+        data = request.form
+
+        hargaTiketAttraction1Baru = data['attraction1_harga']
+        hargaTiketAttraction2Baru = data['attraction2_harga']
+        hargaTiketAttraction3Baru = data['attraction3_harga']
+
+        destinasi['attractions']['attraction1']['harga'] = int(hargaTiketAttraction1Baru)
+        destinasi['attractions']['attraction2']['harga'] = int(hargaTiketAttraction2Baru)
+        destinasi['attractions']['attraction3']['harga'] = int(hargaTiketAttraction3Baru)
+
+        try:
+            db.destinasi.update_one({'_id': ObjectId(id)}, {'$set': destinasi})
+            flash('Berhasil memperbaharui data!', 'success')
+        except Exception as e:
+            flash(f'Gagal. Error: {str(e)}', 'danger')
+        return redirect(url_for('manajemen_destinasi'))
+
+@app.route('/delete_destinasi/<id>')
+def delete_destinasi(id):
+    try:
+        db.destinasi.delete_one({'_id': ObjectId(id)})
+        flash('Berhasil menghapus destinasi!', 'success')
+    except Exception as e:
+        flash(f'Gagal menghapus destinasi. Error: {str(e)}', 'danger')
+
+    return redirect(url_for('manajemen_destinasi'))
 
 
 @app.route("/listdestinasi", methods=["GET"])

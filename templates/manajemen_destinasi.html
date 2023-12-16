@@ -149,71 +149,50 @@
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
 
-            fetch('/add_destinasi', {
-                method: 'POST',
-                body: new FormData(form),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        title: 'Sukses!',
-                        text: data.msg,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed || result.isDismissed) {
-                            location.reload();
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Terjadi kesalahan. Silakan coba lagi.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+          fetch("/add_destinasi", {
+            method: "POST",
+            body: new FormData(form),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'Terjadi kesalahan. Silakan coba lagi.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
+                  title: "Sukses!",
+                  text: data.msg,
+                  icon: "success",
+                  confirmButtonText: "OK",
+                }).then((result) => {
+                  if (result.isConfirmed || result.isDismissed) {
+                    location.reload();
+                  }
                 });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: "Terjadi kesalahan. Silakan coba lagi.",
+                  icon: "error",
+                  confirmButtonText: "OK",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              Swal.fire({
+                title: "Error!",
+                text: "Terjadi kesalahan. Silakan coba lagi.",
+                icon: "error",
+                confirmButtonText: "OK",
+              });
             });
         });
-    });
-
-      // Menggunakan event delegation untuk menangani event pada banyak tombol delete
-      document.addEventListener("click", function (e) {
-        if (e.target.classList.contains("delete-btn")) {
-          // Menampilkan SweetAlert2
-          Swal.fire({
-            title: "Apakah kamu yakin menghapus item ini?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Ya, Hapus!",
-            cancelButtonText: "Batal",
-          }).then((result) => {
-            // Jika tombol "Ya, Hapus!" ditekan
-            if (result.isConfirmed) {
-              // Lakukan tindakan penghapusan di sini (misalnya: panggil fungsi hapus item)
-              // Untuk contoh, saya akan menampilkan pesan alert
-              Swal.fire("Item dihapus!", "", "success");
-            }
-          });
-        }
       });
     </script>
   </head>
@@ -296,7 +275,7 @@
                         <label class="form-label" for="gambarCardDestinasi"
                           >Unggah Gambar Card Destinasi (Potrait)</label
                         >
-                        <hr class="myhr">
+                        <hr class="myhr" />
                       </div>
 
                       <!-- Judul Attraction 1 -->
@@ -362,7 +341,7 @@
                         <label class="form-label" for="deskripsiAttraction1"
                           >Deskripsi Attraction 1</label
                         >
-                        <hr class="myhr">
+                        <hr class="myhr" />
                       </div>
 
                       <!-- Judul Attraction 2 -->
@@ -428,7 +407,7 @@
                         <label class="form-label" for="deskripsiAttraction2"
                           >Deskripsi Attraction 2</label
                         >
-                        <hr class="myhr">
+                        <hr class="myhr" />
                       </div>
 
                       <!-- Judul Attraction 3 -->
@@ -494,7 +473,7 @@
                         <label class="form-label" for="deskripsiAttraction3"
                           >Deskripsi Attraction 3</label
                         >
-                        <hr class="myhr">
+                        <hr class="myhr" />
                       </div>
 
                       <!-- Quotes -->
@@ -544,125 +523,145 @@
               </div>
             </div>
 
-            <!-- Konten tabel -->
+            <!-- table start -->
             <div class="table-responsive-sm">
               <table class="table table-bordered custom-table">
                 <thead class="table-success">
                   <tr>
-                    <th scope="col" class="text-center">NO</th>
+                    <th scope="col">No.</th>
                     <th scope="col">Nama Destinasi</th>
-                    <th scope="col">Lokasi Destinasi</th>
-                    <th scope="col">Stok Tiket</th>
-                    <th scope="col">Harga Satuan</th>
-                    <!-- <th scope="col">Upload</th> -->
-                    <!-- <th scope="col">Status</th>
-                                    <th scope="col">E-Ticket</th> -->
-                    <th scope="col">Actions</th>
+                    <th scope="col">Attraction 1</th>
+                    <th scope="col">Attraction 2</th>
+                    <th scope="col">Attraction 3</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {% for dest in destinasi %}
                   <tr>
-                    <th scope="row" class="text-center">1</th>
-                    <td>Pulau Komodo</td>
-                    <td>NTB</td>
-                    <td>527</td>
-                    <td>RP. 25.000</td>
-                    <!-- <td><input type="file" /></td> -->
-                    <!-- <td>Confirmed</td> -->
-                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
-                    <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit"></i>
-                      </button>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ dest.nama_destinasi }}</td>
+
+                    <td>
+                      <strong>{{ dest.attractions.attraction1.judul }}</strong
+                      ><br />
+                      Harga: Rp. {{ dest.attractions.attraction1.harga }}<br />
+                    </td>
+                    <td>
+                      <strong>{{ dest.attractions.attraction2.judul }}</strong
+                      ><br />
+                      Harga: Rp. {{ dest.attractions.attraction2.harga }}<br />
+                    </td>
+                    <td>
+                      <strong>{{ dest.attractions.attraction3.judul }}</strong
+                      ><br />
+                      Harga: Rp. {{ dest.attractions.attraction3.harga }}<br />
+                    </td>
+                    <td>
                       <button
                         type="button"
-                        class="btn btn-danger btn-sm delete-btn"
+                        class="btn btn-warning btn-sm"
+                        data-toggle="modal"
+                        data-target="#editModal{{ loop.index }}"
                       >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row" class="text-center">2</th>
-                    <td>Istano Basa Pagaruyung</td>
-                    <td>Pariaman</td>
-                    <td>391</td>
-                    <td>RP. 75.000</td>
-                    <!-- <td><input type="file" /></td> -->
-                    <!-- <td>Pending</td> -->
-                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
-                    <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm">
                         <i class="fas fa-edit"></i>
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger btn-sm delete-btn"
+                      |
+
+                      <a
+                        class="btn btn-danger btn-sm"
+                        href="{{ url_for('delete_destinasi', id=dest._id|string) }}"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+
+                      <!-- modal start -->
+                      <div
+                        class="modal fade"
+                        id="editModal{{ loop.index }}"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="editModalLabel{{ loop.index }}"
+                        aria-hidden="true"
                       >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5
+                                class="modal-title"
+                                id="editModalLabel{{ loop.index }}"
+                              >
+                                Edit Destinasi {{ dest.nama_destinasi }}
+                              </h5>
+                              <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                              >
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <!-- Edit form -->
+                              <form
+                                class="editForm"
+                                action="{{ url_for('edit_destinasi', id=dest._id|string) }}"
+                                method="POST"
+                              >
+                                <div class="form-group">
+                                  <hr class="myhr" />
+                                  <label for="editField">
+                                    Harga tiket {{
+                                    dest.attractions.attraction1.judul
+                                    }}:</label
+                                  >
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="attraction1_harga"
+                                    name="attraction1_harga"
+                                    value="{{ dest.attractions.attraction1.harga }}"
+                                  />
+                                  <label for="editField">
+                                    Harga tiket {{
+                                    dest.attractions.attraction2.judul
+                                    }}:</label
+                                  >
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="attraction2_harga"
+                                    name="attraction2_harga"
+                                    value="{{ dest.attractions.attraction2.harga }}"
+                                  />
+                                  <label for="editField">
+                                    Harga tiket {{
+                                    dest.attractions.attraction3.judul
+                                    }}:</label
+                                  >
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="attraction3_harga"
+                                    name="attraction3_harga"
+                                    value="{{ dest.attractions.attraction3.harga }}"
+                                  />
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                  Simpan
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </td>
                   </tr>
-                  <tr>
-                    <th scope="row" class="text-center">3</th>
-                    <td>Museum Kereta Api Ambarawa</td>
-                    <td>Lupa cuy</td>
-                    <td>860</td>
-                    <td>RP. 60.000</td>
-                    <!-- <td><input type="file" /></td> -->
-                    <!-- <td>Pending</td> -->
-                    <!-- <td><a href="link_e_ticket">Download PDF</a></td> -->
-                    <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger btn-sm delete-btn"
-                      >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row" class="text-center">4</th>
-                    <td>Curug Cimahi</td>
-                    <td>Bandung</td>
-                    <td>120</td>
-                    <td>RP. 50.000</td>
-                    <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger btn-sm delete-btn"
-                      >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row" class="text-center">5</th>
-                    <td>Raja Ampat Islands</td>
-                    <td>Papua Barat</td>
-                    <td>300</td>
-                    <td>RP. 200.000</td>
-                    <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger btn-sm delete-btn"
-                      >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </td>
-                  </tr>
+                  {% endfor %}
                 </tbody>
               </table>
             </div>
+
             <nav aria-label="Page navigation example">
               <ul class="pagination justify-content-end">
                 <li class="page-item">
@@ -680,8 +679,19 @@
         </div>
       </div>
     </div>
-    <!-- review End -->
     <div class="mt-5">{% include 'footer.html' %}</div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+    <script>
+        Swal.fire({
+            icon: '{{ "success" if messages[0][1] == "success" else "success" }}',
+            title: 'success',
+            text: '{{ messages[0] }}',
+        });
+    </script>
+  {% endif %}
+{% endwith %}
     <!-- bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
