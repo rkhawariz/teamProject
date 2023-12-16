@@ -447,15 +447,15 @@ def manajemen_tiket():
                     data_tiket=tiket_list,
                 )
             else:
-                return render_template("manajemen_tiket.html")
+                return render_template("manajemen_tiket.html", user_info=user_info, is_admin=is_admin)
         else:
-            return render_template("manajemen_tiket.html", msg="User not found")
+            return render_template("manajemen_tiket.html", msg="User not found", user_info=user_info)
     except jwt.ExpiredSignatureError:
         msg = "Your token has expired"
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
 
-    return render_template("manajemen_tiket.html", msg=msg)
+    return render_template("manajemen_tiket.html", msg=msg, user_info=user_info)
 
 
 @app.route("/ulasan_rekomendasi", methods=["GET"])
@@ -557,23 +557,25 @@ def delete_user(user_id):
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/profile_admin", methods=["GET"])
-def profile_admin():
+@app.route("/profile_admin/<nama>", methods=["GET"])
+def profile_admin(nama):
     token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         user_info = db.user.find_one({"email": payload["id"]})
         is_admin = user_info.get("role") == "admin"
         logged_in = True
-        if is_admin:
-            return render_template(
-                "profile_Admin.html",
-                user_info=user_info,
-                logged_in=logged_in,
-                is_admin=is_admin,
-            )
-        else:
-            return render_template("login.html")
+        if not user_info:
+            return redirect('/forbidden')
+        logged_in = True
+        if user_info['nama'] != nama:
+            return redirect('/forbidden')
+        return render_template(
+            "profile_Admin.html",
+            user_info=user_info,
+            logged_in=logged_in,
+            is_admin=is_admin,
+        )
     except jwt.ExpiredSignatureError:
         msg = "Your token has expired"
     except jwt.exceptions.DecodeError:
