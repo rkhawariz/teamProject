@@ -19,6 +19,8 @@
 
     <!-- AdminLTE JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/js/adminlte.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <!-- for alert delete -->
     <script>
@@ -26,6 +28,12 @@
             if (confirm("Are you sure you want to delete this user?")) {
                 // Add deletion logic here
             } else {}
+        }
+
+        function sign_out() {
+            $.removeCookie("mytoken", { path: "/" });
+            alert("Signed out!");
+            window.location.href = "/";
         }
     </script>
 </head>
@@ -53,7 +61,7 @@
                             Update Profile
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a onclick="sign_out()" class="dropdown-item">
                             Logout
                         </a>
                     </div>
@@ -66,7 +74,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="#" class="brand-link">
+            <a href="/" class="brand-link">
                 <img src="/static/img/logo.svg" alt="Trip Wonder" class="brand-image img-circle elevation-3"
                     style="opacity: .8">
                 <span class="brand-text font-weight-light">TW</span>
@@ -139,7 +147,8 @@
             <!-- /.content-header -->
 
 
-
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 </body>
 
 </html>

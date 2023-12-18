@@ -586,7 +586,7 @@ def edit_user(user_id):
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         doc = {
-            'username': username,
+            'nama': username,
             'email': email,
             'password': hashed_password,
             'role': role,
