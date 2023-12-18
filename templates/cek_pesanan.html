@@ -369,7 +369,7 @@
                   <td>{{ ticket['hargaTiket'] }}</td>
                   <td>{{ ticket['totalHargaTiket'] }}</td>
                   <td>
-                    {% if ticket['status'] == 'approve' %}
+                    {% if ticket['status'] == 'confirmed' %}
                     <p>Bukti pembayaran berhasil diupload</p>
                     {% else %}
                     <input id="buktiUpload-{{ ticket['_id'] }}" type="file" />
@@ -377,7 +377,7 @@
                   </td>
                   <td>{{ ticket['status'] }}</td>
                   <td>
-                    {% if ticket['status'] == 'approve' %}
+                    {% if ticket['status'] == 'confirmed' %}
                     <button
                       type="button"
                       class="btn btn-outline-dark"
@@ -400,7 +400,7 @@
                     {% endif %}
                   </td>
                   <td>
-                    {% if ticket['status'] == 'approve' %}
+                    {% if ticket['status'] == 'confirmed' %}
                     <button class="custom-btn">
                       <i class="fas fa-download"></i> Download PDF
                     </button>
@@ -424,7 +424,7 @@
                         value="{{ ticket['jumlahTiket'] }}"
                       />
                       <!-- Tambahkan hidden input lainnya sesuai kebutuhan -->
-                      {% if ticket['status'] == 'approve' %}
+                      {% if ticket['status'] == 'confirmed' %}
                       <button
                       type="button"
                       class="btn btn-outline-dark"
@@ -508,6 +508,15 @@
                   id="review{{ loop.index }}"
                   rows="3"
                 ></textarea>
+                <label for="pemberiUlasan{{ loop.index }}"
+                  >Pemberi Ulasan:</label
+                >
+                <input
+                  type="text"
+                  id="pemberiUlasan{{ loop.index }}"
+                  value="{{ ticket['namaPemesan'] }}"
+                  readonly
+                />
               </div>
               <div class="modal-footer">
                 <button
@@ -560,6 +569,7 @@
         let namaAttraction = $(`#namaAttraction${index}`).val();
         let rating = $(`#rating${index}`).val();
         let review = $(`#review${index}`).val();
+        let pemberiUlasan = $(`#pemberiUlasan${index}`).val();
 
         $.ajax({
           type: "POST",
@@ -568,6 +578,7 @@
             namaAttraction: namaAttraction,
             rating: rating,
             review: review,
+            pemberiUlasan: pemberiUlasan,
           },
           success: function (response) {
             if (response.status === "success") {

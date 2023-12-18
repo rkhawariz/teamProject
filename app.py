@@ -355,11 +355,11 @@ def pesantiket():
         "status": "pending",
         "buktiPembayaran": "",
         "e-ticket": "",
+        "waktuPemesanan": datetime.now().strftime('%Y-%m-%d %H:%M')
     }
     db.tiket.insert_one(doc)
     return redirect(url_for("home"))
-
-
+  
 @app.route("/about", methods=["GET"])
 def about():
     token_receive = request.cookies.get(TOKEN_KEY)
@@ -399,6 +399,7 @@ def cek_pesanan(nama):
             tiket_data = {
                 "_id": str(ticket['_id']),
                 "namaAttraction": ticket["namaAttraction"],
+                "namaPemesan": ticket["namaPemesan"],
                 "jumlahTiket": ticket["jumlahTiket"],
                 "hargaTiket": ticket["hargaTiket"],
                 "totalHargaTiket": ticket["totalHargaTiket"],
@@ -420,7 +421,7 @@ def cek_pesanan(nama):
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
-
+  
 @app.route('/upload_bukti/<ticket_id>', methods=['POST'])
 def upload_bukti(ticket_id):
     buktiUpload = request.files['buktiUpload']
@@ -504,7 +505,7 @@ def manajemen_tiket():
 
 
 @app.route("/ulasan_rekomendasi", methods=["GET"])
-def ulasan_rekomendasi():
+def list_ulasan_rekomendasi():
     token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
@@ -512,8 +513,13 @@ def ulasan_rekomendasi():
         is_admin = user_info.get("role") == "admin"
         logged_in = True
         if is_admin:
+            data_ulasan = db.ulasan.find({},{'_id': False})
+            
+            list_ulasan = list(data_ulasan)
+            
             return render_template(
                 "ulasan_dan_rekom.html",
+                list_ulasan=list_ulasan,
                 user_info=user_info,
                 logged_in=logged_in,
                 is_admin=is_admin,
@@ -525,7 +531,7 @@ def ulasan_rekomendasi():
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
-
+  
 
 @app.route("/manajemen_user", methods=["GET"])
 def manajemen_user():
@@ -596,17 +602,12 @@ def delete_user():
 
         # Lakukan logika untuk menghapus pengguna dari struktur data (atau database)
         # Misalnya:
-        for user in users:
-            if user['id'] == int(user_id):
-                users.remove(user)
-                break
+        # for user in users:
+        #     if user['id'] == int(user_id):
+        #         users.remove(user)
+        #         break
 
-        # Di sini, Anda bisa melakukan penghapusan pada database jika Anda menggunakan database
-
-        return "Success"  # Atau responsenya bisa disesuaikan dengan kebutuhan
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        # return "Success"  
 
 
 @app.route("/profile_admin/<nama>", methods=["GET"])
@@ -712,11 +713,14 @@ def simpan_ulasan():
         namaAttraction = request.form['namaAttraction']
         rating = request.form['rating']
         review = request.form['review']
+        pemberiUlasan = request.form['pemberiUlasan']  
 
         doc = {
             "namaAttraction" : namaAttraction,
             "rating": rating,
             "review": review,
+            "pemberiUlasan": pemberiUlasan,
+            "waktu": datetime.now().strftime("%B %Y")
         }
         
         db.ulasan.insert_one(doc)
