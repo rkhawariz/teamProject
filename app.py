@@ -540,7 +540,7 @@ def manajemen_user():
             user_list = []
 
             for user in users:
-                user_info = {
+                user_lists = {
                     "id": str(user["_id"]),
                     "nama": user["nama"],
                     "email": user["email"],
@@ -548,7 +548,7 @@ def manajemen_user():
                     "role": user["role"],
                     # 'status': user['status'],
                 }
-                user_list.append(user_info)
+                user_list.append(user_lists)
 
             return render_template(
                 "manajemen_user.html",
@@ -566,40 +566,47 @@ def manajemen_user():
     return render_template("login.html", msg=msg)
 
 
-@app.route("/edit_user/<user_id>", methods=["PUT"])
-def edit_user(user_id):
+@app.route('/edit_user', methods=['POST'])
+def edit_user_by_username(username, edited_email, edited_role, edited_status):
     try:
-        data = request.json
-
-        # Lakukan pembaruan data pengguna di database menggunakan user_id dan data yang baru
-        # Contoh:
-        db.user.update_one(
-            {"_id": ObjectId(user_id)},
+        # Update user berdasarkan username
+        result = db.user.update_many(
+            {"username": username},
             {
                 "$set": {
-                    "nama": data["nama"],
-                    "email": data["email"],
-                    "role": data["role"],
-                    "password": data[
-                        "password"
-                    ],  # Pastikan cara penyimpanan password yang aman
+                    "email": edited_email,
+                    "role": edited_role,
+                    "status": edited_status
                 }
-            },
+            }
         )
-        return jsonify({"message": "User updated successfully"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        
+        if result.modified_count > 0:
+            return {"status": "success", "message": f"Users with username '{username}' updated successfully."}
+        else:
+            return {"status": "error", "message": f"No users found with username '{username}' or no changes made."}
 
-
-@app.route("/delete_user/<user_id>", methods=["DELETE"])
-def delete_user(user_id):
-    try:
-        # Hapus data pengguna dari database berdasarkan user_id
-        # Contoh:
-        db.user.delete_one({"_id": ObjectId(user_id)})
-        return jsonify({"message": "User deleted successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return {"status": "error", "message": str(e)}
+
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    if request.method == 'POST':
+        user_id = request.form['userId']  # Sesuaikan dengan parameter yang dikirim dari frontend
+
+        # Lakukan logika untuk menghapus pengguna dari struktur data (atau database)
+        # Misalnya:
+        for user in users:
+            if user['id'] == int(user_id):
+                users.remove(user)
+                break
+
+        # Di sini, Anda bisa melakukan penghapusan pada database jika Anda menggunakan database
+
+        return "Success"  # Atau responsenya bisa disesuaikan dengan kebutuhan
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 @app.route("/profile_admin/<nama>", methods=["GET"])

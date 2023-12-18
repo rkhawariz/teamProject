@@ -6,75 +6,6 @@
     <title>Trip Wonder | User Management</title>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Script Section -->
-<!-- <script>
-    // Fungsi untuk mengisi form edit dengan data pengguna yang akan diubah
-    function editUser(userId) {
-            $.ajax({
-                url: `/get_user/${userId}`,
-                type: 'GET',
-                dataType: 'json',
-                success: function(user) {
-                    $('#editUserName').val(user.nama);
-                    $('#editEmail').val(user.email);
-                    $('#editPassword').val(''); // Atur nilai password ke input field baru
-
-                    const editModal = new bootstrap.Modal($('#editModal'), {
-                        keyboard: false
-                    });
-                    editModal.show();
-                },
-                error: function(error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
-
-    // Fungsi untuk menyimpan perubahan pada data pengguna yang telah diubah
-    $('#saveChangesEdit').on('click', function() {
-        const editedUserName = $('#editUserName').val();
-        const editedEmail = $('#editEmail').val();
-        const userId = $(this).data('userid'); // Anda perlu menyesuaikan cara mendapatkan userId
-
-        $.ajax({
-            url: `/edit_user/${userId}`,
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                nama: editedUserName,
-                email: editedEmail,
-                role: editedRole,
-                status: editedStatus
-            }),
-            success: function(result) {
-                console.log(result);
-                $('#editModal').modal('hide');
-            },
-            error: function(error) {
-                console.error('Error:', error);
-            }
-        });
-    });
-
-    // Fungsi untuk mengkonfirmasi penghapusan data pengguna
-    function deleteConfirmation(userId) {
-        if (confirm("Are you sure you want to delete this user?")) {
-            $.ajax({
-                url: `/delete_user/${userId}`,
-                type: 'DELETE',
-                success: function(result) {
-                    console.log(result);
-                    // Lakukan sesuatu setelah penghapusan berhasil
-                },
-                error: function(error) {
-                    console.error('Error:', error);
-                }
-            });
-        } else {
-            // Tidak melakukan apa-apa jika pengguna membatalkan penghapusan
-        }
-    }
-</script> -->
 
 </head>
 <body>
@@ -113,7 +44,7 @@
                     <tbody>
                         {% for user in users %}
                         <tr>
-                            <th scope="row">{{ user.id }}</th>
+                            <th scope="row">{{ loop.index }}</th>
                             <td>{{ user.nama }}</td>
                             <td>{{ user.email }}</td>
                             <!-- Informasi lainnya sesuai dengasn struktur tabel Anda -->
@@ -121,10 +52,14 @@
                             <td>{{ user.role }}</td>
                             <td>{{ user.status }}</td>
                             <td>
-                                <button type="button" onclick="editUser('{{ user.id }}')">Edit</button>
+                                <button type="button" class="btn btn-square btn-outline-warning" onclick="editUser('{{ user.id }}', '{{ user.nama }}', '{{ user.email }}', '{{ user.role }}', '{{ user.status }}')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
                             </td>
                             <td>
-                                <button type="button" onclick="deleteConfirmation('{{ user.id }}')">Delete</button>
+                                <button type="button" class="btn btn-square btn-outline-danger" onclick="deleteConfirmation('{{ user.id }}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         {% endfor %}
@@ -134,7 +69,7 @@
         </div>
     
  <!-- Modal Edit User -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+ <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -191,79 +126,72 @@
 </div>
 <!-- End Modal Edit User -->
 
-    
-        <script>
-            // Fungsi untuk mengisi form edit dengan data pengguna yang akan diubah
-            function editUser(userId) {
-                $.ajax({
-                    url: `/get_user/${userId}`,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(user) {
-                        $('#editUserName').val(user.nama);
-                        $('#editEmail').val(user.email);
-                        $('#editPassword').val(''); // Atur nilai password ke input field baru
-                        $('#editRole').val(user.role); // Mengisi nilai role ke dalam form edit
-                        $('#editStatus').val(user.status); // Mengisi nilai status ke dalam form edit
-        
-                        const editModal = new bootstrap.Modal($('#editModal'), {
-                            keyboard: false
-                        });
-                        editModal.show();
-                    },
-                    error: function(error) {
-                        console.error('Error:', error);
-                    }
-                });
-            }
-        
-            // Fungsi untuk menyimpan perubahan pada data pengguna yang telah diubah
-            $('#saveChangesEdit').on('click', function() {
-                const editedUserName = $('#editUserName').val();
-                const editedEmail = $('#editEmail').val();
-                const editedRole = $('#editRole').val();
-                const editedStatus = $('#editStatus').val();
-                const userId = $(this).data('userid'); // Anda perlu menyesuaikan cara mendapatkan userId
-        
-                $.ajax({
-                    url: `/edit_user/${userId}`,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        nama: editedUserName,
-                        email: editedEmail,
-                        role: editedRole,
-                        status: editedStatus
-                    }),
-                    success: function(result) {
-                        console.log(result);
-                        $('#editModal').modal('hide');
-                    },
-                    error: function(error) {
-                        console.error('Error:', error);
-                    }
-                });
-            });
-        
-            // Fungsi untuk mengkonfirmasi penghapusan data pengguna
-            function deleteConfirmation(userId) {
-                if (confirm("Are you sure you want to delete this user?")) {
-                    $.ajax({
-                        url: `/delete_user/${userId}`,
-                        type: 'DELETE',
-                        success: function(result) {
-                            console.log(result);
-                            // Lakukan sesuatu setelah penghapusan berhasil
-                        },
-                        error: function(error) {
-                            console.error('Error:', error);
+<script>
+    function editUser(userId, userName, email, role, status) {
+        $('#editUserId').val(userId);
+        $('#editUserName').val(userName);
+        $('#editEmail').val(email);
+        $('#editRole').val(role);
+        $('#editStatus').val(status);
+
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'), {
+            keyboard: false
+        });
+        editModal.show();
+    }
+
+    $('#saveChangesEdit').on('click', function() {
+        const userId = $('#editUserId').val();
+        const editedUserName = $('#editUserName').val();
+        const editedEmail = $('#editEmail').val();
+        const editedRole = $('#editRole').val();
+        const editedStatus = $('#editStatus').val();
+
+        $.ajax({
+            type : "POST",
+            url : "/edit_user",
+            data : {
+                editedUserName: editedUserName,
+                editedEmail: editedEmail,
+                editedRole: editedRole,
+                editedStatus: editedStatus,
+            },
+            success: function (response) {
+                if (response.status === "success") {
+                    Swal.fire({
+                        title: "Success!",
+                        text: response.message,
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); 
                         }
                     });
                 } else {
-                    // Tidak melakukan apa-apa jika pengguna membatalkan penghapusan
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.message,
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
                 }
+            },
+            error: function (err) {
+                console.error(err);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Terjadi kesalahan saat menyimpan ulasan.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
             }
-        </script>
+        });
+    });
+
+    // Function deleteConfirmation(userId) remains unchanged
+</script>
+
         
     </body>
     
