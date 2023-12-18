@@ -687,6 +687,24 @@ def profil_User():
 def forbidden():
     return render_template('error.html')
 
+@app.route('/simpan-ulasan', methods=['POST'])
+def simpan_ulasan():
+    try:
+        namaAttraction = request.form['namaAttraction']
+        rating = request.form['rating']
+        review = request.form['review']
+
+        doc = {
+            "namaAttraction" : namaAttraction,
+            "rating": rating,
+            "review": review,
+        }
+        
+        db.ulasan.insert_one(doc)
+
+        return jsonify({"status": "success", "message": "Ulasan berhasil disimpan!"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": f'Gagal menyimpan ulasan: {str(e)}'})
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)

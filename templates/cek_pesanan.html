@@ -122,6 +122,55 @@
                 font-size: 15px;
             }
         }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select.form-control-sm,
+        textarea.form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
     </style>
 </head>
 
@@ -316,26 +365,30 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="formUlasan">
                         <div class="form-group">
-                            <label for="rating1">Rating:</label>
-                            <select class="form-control-sm" id="rating1">
-                                <option value="1">⭐</option><!-- Bintang Satu -->
-                                <option value="2">⭐⭐</option><!-- Bintang Dua -->
-                                <option value="3">⭐⭐⭐</option><!-- Bintang Tiga -->
-                                <option value="4">⭐⭐⭐⭐</option><!-- Bintang Empat -->
-                                <option value="5">⭐⭐⭐⭐⭐</option><!-- Bintang Lima -->
+                            <label for="namaAttraction{{ loop.index }}">Nama Attraction:</label>
+                            <input type="text" id="namaAttraction{{ loop.index }}"
+                                value="{{ ticket['namaAttraction'] }}" readonly>
+                            <label for="rating{{ loop.index }}">Rating:</label>
+                            <select class="form-control-sm" id="rating{{ loop.index }}">
+                                <option value="⭐">⭐</option><!-- Bintang Satu -->
+                                <option value="⭐⭐">⭐⭐</option><!-- Bintang Dua -->
+                                <option value="⭐⭐⭐">⭐⭐⭐</option><!-- Bintang Tiga -->
+                                <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option><!-- Bintang Empat -->
+                                <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option><!-- Bintang Lima -->
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="review1">Ulasan:</label>
-                            <textarea class="form-control" id="review1" rows="3"></textarea>
+                            <label for="review{{ loop.index }}">Ulasan:</label>
+                            <textarea class="form-control" id="review{{ loop.index }}" rows="3"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-primary"
+                                onclick="kirimUlasan({{ loop.index }})">Kirim</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Kirim</button>
                 </div>
             </div>
         </div>
@@ -366,6 +419,55 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        function kirimUlasan(index) {
+            let namaAttraction = $(`#namaAttraction${index}`).val();
+            let rating = $(`#rating${index}`).val();
+            let review = $(`#review${index}`).val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/simpan-ulasan',
+                data: {
+                    namaAttraction: namaAttraction,
+                    rating: rating,
+                    review: review
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Refresh halaman setelah OK ditekan
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (err) {
+                    console.error(err);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat menyimpan ulasan.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
