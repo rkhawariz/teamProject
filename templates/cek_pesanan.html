@@ -162,7 +162,8 @@
                     </a>
                     <ul class="dropdown-menu submenu dropdown-menu-dark">
                         <li>
-                            <a class="dropdown-item" href="/profile_User/{{ user_info.nama }}"><i class="fas fa-user fa-sm fa-fw mr-2"></i>Profile</a>
+                            <a class="dropdown-item" href="/profile_User/{{ user_info.nama }}"><i
+                                    class="fas fa-user fa-sm fa-fw mr-2"></i>Profile</a>
                         </li>
 
                         <!-- {% if is_admin %} -->
@@ -237,7 +238,7 @@
                                 <td><input type="file" /></td>
                                 <td>{{ ticket['status'] }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    <button type="button" class="btn btn-outline-dark" data-toggle="modal"
                                         data-target="#ratingModal{{ loop.index }}">
                                         Beri Rating dan Ulasan
                                     </button>
@@ -254,7 +255,8 @@
                                             value="{{ ticket['namaAttraction'] }}">
                                         <input type="hidden" name="jumlahTiket" value="{{ ticket['jumlahTiket'] }}">
                                         <!-- Tambahkan hidden input lainnya sesuai kebutuhan -->
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-outline-dark"
+                                            style="width: 60px; height: 60px; padding-right: 60px;">Submit</button>
                                     </form>
                                 </td>
                             </tr>
