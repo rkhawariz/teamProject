@@ -1,15 +1,15 @@
 # Trip Wonders 
 
-nourish connection is a place for UMKM to add knowledge to expand customer reach and it is hoped that UMKM can continue to grow and be empowered. The platform we created is Nourish Connection which means that "Nourish" can also mean to support, enrich, or enliven something emotionally or intellectually. Meanwhile, "Connection" refers to emotional, social, or communication bonds between individuals or groups. This forum is a forum for meeting partnerships for business actors which was created with the aim of strengthening business cooperation networks so that relations are broader between fellow actors by mutually reinforcing one another.
+Trip Wonders is a place for exploring destination in Indonesia. a website that provides information on various tourist destinations in Indonesia. At Trip Wonders, we believe that travel is not just about reaching a destination; it's about the transformative journey that occurs along the way. Our mission is to curate extraordinary travel experiences that go beyond the ordinary, creating memories to last a lifetime.
 
-## Features Nourish Connection
-- User Registration: contains several input texts such as Business Name, password, area, Category, and Business description, there is also a register button. Thus users can register and join the Nourish Connection.
-- User Login: contains text input that functions for users to enter their registered Business Name and password and one login button so that users can enter the application.
+## Trip Wonders Features
+- User Registration: contains several input texts such as email, password, there is also a register button. Thus users can register and join the Trip Wonders.
+- User Login: contains text input that functions for users to enter their information and password and one login button so that users can enter the application.
 - Admin Page: pages that can be accessed by admins who have registered in the database, and will contain user data for validation.
-- List Destinasi: contains UMKM information, starting from UMKM area information, UMKM social media information, and descriptions of these UMKM.
-- Diskusi Page: users can start a chat topic or comment on the chat topic, there is also a like button and a delete button to delete the topic card.
+- Destination Lists: contains UMKM information, starting from UMKM area information, UMKM social media information, and descriptions of these UMKM.
+- Ticket Order: users can start a chat topic or comment on the chat topic, there is also a like button and a delete button to delete the topic card.
 - Profile Page: contains all the user's profile information, and the user can also change the profile according to his wishes.
-- Edit Profile: user can edit profile info, according to their business needs.
+- Edit Profile: user can edit profile info
 
 ## Technologies Used
 - Programming Language: HTML, CSS, Javascript, and Python.
@@ -24,4 +24,4 @@ nourish connection is a place for UMKM to add knowledge to expand customer reach
 4. Run the command npm install to install all the required dependencies.
 5. Create an .env file containing environment configurations such as the database URL and API keys.
 6. Run the command npm start to run the project.
-7. Access the application through the browser using the URL http://localhost:3000.
+7. Access the application through the browser using the URL http://localhost:5000.
