@@ -303,12 +303,14 @@
     </div>
 
     <!-- Modal 1 -->
-    <div class="modal fade" id="ratingModal1" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel1"
-        aria-hidden="true">
+    {% for ticket in tiket_list %}
+    <div class="modal fade" id="ratingModal{{ loop.index }}" tabindex="-1" role="dialog"
+        aria-labelledby="ratingModalLabel{{ loop.index }}" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ratingModalLabel1">Beri Rating dan Ulasan - Komodo</h5>
+                    <h5 class="modal-title" id="ratingModalLabel1">Beri Rating dan Ulasan -
+                        {{ ticket['namaAttraction'] }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -338,79 +340,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal 2 -->
-    <div class="modal fade" id="ratingModal2" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel1"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ratingModalLabel1">Beri Rating dan Ulasan - Istano Basa Pagaruyung</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="rating1">Rating:</label>
-                            <select class="form-control-sm" id="rating1">
-                                <option value="1">⭐</option><!-- Bintang Satu -->
-                                <option value="2">⭐⭐</option><!-- Bintang Dua -->
-                                <option value="3">⭐⭐⭐</option><!-- Bintang Tiga -->
-                                <option value="4">⭐⭐⭐⭐</option><!-- Bintang Empat -->
-                                <option value="5">⭐⭐⭐⭐⭐</option><!-- Bintang Lima -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="review1">Ulasan:</label>
-                            <textarea class="form-control" id="review1" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Kirim</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal 3 -->
-    <div class="modal fade" id="ratingModal3" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel1"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ratingModalLabel1">Beri Rating dan Ulasan - Museum Kereta Api Ambarawa
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="rating1">Rating:</label>
-                            <select class="form-control-sm" id="rating1">
-                                <option value="1">⭐</option><!-- Bintang Satu -->
-                                <option value="2">⭐⭐</option><!-- Bintang Dua -->
-                                <option value="3">⭐⭐⭐</option><!-- Bintang Tiga -->
-                                <option value="4">⭐⭐⭐⭐</option><!-- Bintang Empat -->
-                                <option value="5">⭐⭐⭐⭐⭐</option><!-- Bintang Lima -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="review1">Ulasan:</label>
-                            <textarea class="form-control" id="review1" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Kirim</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
     <br>
     <!-- end -->
 
