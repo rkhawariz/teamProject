@@ -9,6 +9,8 @@ import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from bson import ObjectId
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -395,6 +397,7 @@ def cek_pesanan(nama):
 
         for ticket in tiket_info:
             tiket_data = {
+                "_id": str(ticket['_id']),
                 "namaAttraction": ticket["namaAttraction"],
                 "jumlahTiket": ticket["jumlahTiket"],
                 "hargaTiket": ticket["hargaTiket"],
@@ -418,6 +421,15 @@ def cek_pesanan(nama):
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
 
+@app.route('/upload_bukti/<ticket_id>', methods=['POST'])
+def upload_bukti(ticket_id):
+    buktiUpload = request.files['buktiUpload']
+    namaBuktiUpload = f'static/booking/{ticket_id}_{buktiUpload.filename}'
+    
+    buktiUpload.save(namaBuktiUpload)
+    
+    db.tiket.update_one({'_id': ObjectId(ticket_id)}, {'$set': {'buktiPembayaran': namaBuktiUpload}})
+    return jsonify({'message': 'Proof updated successfully'}), 200
 
 @app.route("/beranda_admin", methods=["GET"])
 def beranda_admin():
