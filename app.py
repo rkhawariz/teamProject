@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from bson import ObjectId
 from reportlab.pdfgen import canvas
 from io import BytesIO
+import logging
 from flask import send_from_directory
 
 
@@ -344,9 +345,9 @@ def pesantiket():
     namaAttraction = request.form["attractionGive"]
     namaPemesan = request.form["namaPemesan"]
     emailPemesan = request.form["emailPemesan"]
-    hargaTiket = request.form["hargaTiket"]
+    hargaTiket = int(request.form["hargaTiket"])
     jumlahTiket = request.form["jumlahTiket"]
-    totalHargaTiket = request.form["totalHargaTiket"]
+    totalHargaTiket = int(request.form["totalHargaTiket"])
     tanggal = request.form["tanggal"]
     doc = {
         "namaAttraction": namaAttraction,
@@ -459,7 +460,42 @@ def beranda_admin():
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
 
+@app.route('/get_statistik_pemesanan', methods=['GET'])
+def get_statistik_pemesanan():
+    semua_data = db.tiket.find()
 
+    jumlah_pemesanan_per_bulan = {
+        '01': 0, '02': 0, '03': 0, '04': 0, '05': 0, '06': 0,
+        '07': 0, '08': 0, '09': 0, '10': 0, '11': 0, '12': 0
+    }
+
+    for data in semua_data:
+        bulan = datetime.strptime(data['waktuPemesanan'], '%Y-%m-%d %H:%M').strftime('%m')
+        jumlah_pemesanan_per_bulan[bulan] += 1
+
+    data_pemesanan = {
+        'labels': [datetime.strptime(str(k), '%m').strftime('%B') for k in jumlah_pemesanan_per_bulan.keys()],
+        'data': list(jumlah_pemesanan_per_bulan.values())
+    }
+
+    return jsonify(data_pemesanan=data_pemesanan)
+
+@app.route('/get_statistik_pendapatan', methods=['GET'])
+def get_statistik_pendapatan():
+    data = db.tiket.aggregate([
+        {
+            '$group': {
+                '_id': {'$substr': ['$waktuPemesanan', 0, 7]},
+                'totalHarga': {'$sum': '$totalHargaTiket'}
+            }
+        },
+        {
+            '$sort': {'_id': 1}
+        }
+    ])
+
+    result = list(data)
+    return jsonify(data=result)
 
 @app.route("/manajemen_tiket", methods=["GET"])
 def manajemen_tiket():
