@@ -454,16 +454,22 @@ def upload_bukti(ticket_id):
             algorithms=['HS256']
         )
         user_info = db.users.find_one({"email": payload["id"]})
-        # nama_pengguna = user_info.get("nama")
         
         buktiUpload = request.files['buktiUpload']
-        file_extension = os.path.split(buktiUpload.filename)[1]
-        namaBuktiUpload = f'static/booking/bukti_pembayaran-{file_extension}'
+        file_extension = os.path.splitext(buktiUpload.filename)[1]
+        namaBuktiUpload = f'static/booking/bukti_pembayaran-{ticket_id}{file_extension}'
 
         buktiUpload.save(namaBuktiUpload)
         
-        db.tiket.update_one({'_id': ObjectId(ticket_id)}, {'$set': {'buktiPembayaran': namaBuktiUpload}})
-        return jsonify({'message': 'Proof updated successfully'}), 200
+        # Update tiket dengan status 'uploaded'
+        db.tiket.update_one(
+            {'_id': ObjectId(ticket_id)},
+            {'$set': {
+                'buktiPembayaran': namaBuktiUpload,
+                'status': 'uploaded'  # Menambahkan status 'uploaded'
+            }}
+        )
+        return jsonify({'message': 'Proof updated successfully', 'status': 'uploaded'}), 200
     
     except jwt.ExpiredSignatureError:
         return jsonify({'message': 'Your token has expired'}), 401

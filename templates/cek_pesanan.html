@@ -212,6 +212,10 @@
           success: function (response) {
             console.log(response);
             alert("Proof updated successfully");
+            // Memperbarui tampilan status jika respons server berisi status baru
+            if (response.status === 'uploaded') {
+              $('#statusDiv').html('<p>Bukti pembayaran berhasil diupload</p>');
+            }
             window.location.reload();
           },
           error: function (xhr, status, error) {
@@ -220,7 +224,7 @@
           },
         });
       }
-    </script>
+    </script>    
   </head>
 
   <body id="page-top">
@@ -336,7 +340,7 @@
           <h1 class="display-4">Pesanan Tiket Kamu</h1>
         </div>
         <br>
-        <div>
+        <div class="text-center">
           <h4>Metode Pembayaran Trip Wonders</h4>
           <p class="lead mb-1">Transfer pembayaran sesuai total harga tiket kamu ke:</p>
           <p>Nomor Rekening: 1234-2523-5268 (BCA) A.N: Trip Wonders</p>
@@ -375,11 +379,15 @@
                   <td>{{ ticket['totalHargaTiket'] }}</td>
                   <td>
                     {% if ticket['status'] == 'confirmed' %}
-                    <p>Bukti pembayaran berhasil diupload</p>
+                      <p>Bukti pembayaran sudah di acc</p>
                     {% else %}
-                    <input id="buktiUpload-{{ ticket['_id'] }}" type="file" />
+                      {% if ticket['status'] == 'uploaded' %}
+                        <p>Bukti pembayaran berhasil diupload</p>
+                      {% else %}
+                        <input id="buktiUpload-{{ ticket['_id'] }}" type="file" />
+                      {% endif %}
                     {% endif %}
-                  </td>
+                  </td>                  
                   <td>{{ ticket['status'] }}</td>
                   <td>
                     {% if ticket['status'] == 'confirmed' %}
