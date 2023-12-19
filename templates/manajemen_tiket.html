@@ -7,13 +7,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- for alert delette -->
+    <!-- for alert delete -->
     <script>
         function deleteConfirmation() {
-            if (confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
-                
-            } else {
-            }
+            return confirm("Apakah Anda yakin ingin menghapus tiket ini?");
         }
     </script>
 </head>
@@ -25,7 +22,7 @@
             <li class="breadcrumb-item active" aria-current="page"><i>Ticket</i></li>
         </ol>
     </nav>
-     <div class="container-fluid">
+    <div class="container-fluid">
         <div class="row justify-content-end m-2">
             <div class="col-auto">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -34,238 +31,110 @@
             </div>
         </div>
     </div>
-      <div class="m-4">
+    <div class="m-4">
         <div class="bg-light rounded h-100 p-4">
             <h6 class="mb-4">Table Ticket</h6>
             
-  {% if is_admin %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID Tiket</th>
-        <th>Nama Attraction</th>
-        <th>Nama Pemesan</th>
-        <th>Harga Tiket</th>
-        <th>Jumlah Tiket</th>
-        <th>Total Harga Tiket</th>
-        <th>Tanggal Pemesanan</th>
-        <th>Bukti Pembayaran</th>
-        <th>Status</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for tiket in data_tiket %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ tiket.namaAttraction }}</td>
-          <td>{{ tiket.namaPemesan }}</td>
-          <td>{{ tiket.hargaTiket }}</td>
-          <td>{{ tiket.jumlahTiket }}</td>
-          <td>{{ tiket.totalHargaTiket }}</td>
-          <td>{{ tiket.tanggal }}</td>
-          <td>
-            {% if tiket.status == 'confirmed' %}
-                <a href="{{ url_for('lihat_bukti_pembayaran', ticket_id=tiket.id) }}" class="btn btn-info" target="_blank">Lihat Bukti Pembayaran</a>
+            {% if is_admin %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID Tiket</th>
+                        <th>Nama Attraction</th>
+                        <th>Nama Pemesan</th>
+                        <th>Harga Tiket</th>
+                        <th>Jumlah Tiket</th>
+                        <th>Total Harga Tiket</th>
+                        <th>Tanggal Pemesanan</th>
+                        <th>Bukti Pembayaran</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tiket in data_tiket %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ tiket.namaAttraction }}</td>
+                        <td>{{ tiket.namaPemesan }}</td>
+                        <td>{{ tiket.hargaTiket }}</td>
+                        <td>{{ tiket.jumlahTiket }}</td>
+                        <td>{{ tiket.totalHargaTiket }}</td>
+                        <td>{{ tiket.tanggal }}</td>
+                        <td>
+                            {% if tiket.status == 'confirmed' %}
+                                <a href="{{ url_for('lihat_bukti_pembayaran', ticket_id=tiket.id) }}" class="btn btn-info" target="_blank">Lihat Bukti Pembayaran</a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ tiket.status }}</td>
+                        <td>
+                            {% if tiket.status == 'pending' %}
+                                <a href="{{ url_for('konfirmasi_pembayaran', ticket_id=tiket.id) }}" class="btn btn-success">Konfirmasi Pembayaran</a>
+                                <button type="button" class="btn btn-danger" onclick="deleteTicket('{{ tiket.id }}')">Delete</button>
+                            {% else %}
+                                <span class="badge badge-success">Terkonfirmasi</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             {% else %}
-                N/A
+                <p>Anda tidak memiliki akses untuk melihat halaman ini.</p>
             {% endif %}
-        </td>        
-          <td>{{ tiket.status }}</td>
-          <!-- Inside the tbody, within the for loop -->
-<td>
-    {% if tiket.status == 'pending' %}
-        <a href="{{ url_for('konfirmasi_pembayaran', ticket_id=tiket.id) }}" class="btn btn-success">Konfirmasi Pembayaran</a>
-        <button type="button" class="btn btn-danger" onclick="deleteTicket('{{ tiket.id }}')">Delete</button>
-    {% else %}
-        <span class="badge badge-success">Terkonfirmasi</span>
-    {% endif %}
-</td>
-
-
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% else %}
-  <p>Anda tidak memiliki akses untuk melihat halaman ini.</p>
-{% endif %}
         </div>
     </div>
 
-  
-
-
-<!-- Modal Edit -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Tiket</h5>
-                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3 row">
-                        <label for="editNamaTiket" class="col-sm-2 col-form-label">Nama Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="editNamaTiket" placeholder="Nama Tiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editHargaTiket" class="col-sm-2 col-form-label">Harga Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="editHargaTiket" placeholder="Harga Tiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editStokTiket" class="col-sm-2 col-form-label">Stok Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="editStokTiket" placeholder="Stok Tiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editTanggalBerlaku" class="col-sm-2 col-form-label">Tanggal Berlaku</label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control" id="editTanggalBerlaku">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editFotoTiket" class="col-sm-2 col-form-label">Foto Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="file" class="form-control" id="editFotoTiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editKategoriDropdown" class="col-sm-2 col-form-label">Kategori Tiket</label>
-                        <div class="col-sm-10">
-                            <select class="form-select" id="editKategoriDropdown">
-                                <option selected>Pilih Kategori</option>
-                                <option value="Dewasa">Dewasa</option>
-                                <option value="Anak">Anak</option>
-                                <option value="Keluarga">Keluarga</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editStatusDropdown" class="col-sm-2 col-form-label">Status</label>
-                        <div class="col-sm-10">
-                            <select class="form-select" id="editStatusDropdown">
-                                <option selected>Pilih Status</option>
-                                <option value="Tersedia">Tersedia</option>
-                                <option value="Habis">Habis</option>
-                                <option value="Dihentikan">Dihentikan</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveChangesEdit">Save</button>
+    <!-- Modal Edit -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Tiket</h5>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- Form fields go here -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesEdit">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-  
+    <!-- Include your other modal if needed -->
 
-
-<!-- Modal Edit -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Tiket</h5>
-                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3 row">
-                        <label for="editNamaTiket" class="col-sm-2 col-form-label">Nama Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="editNamaTiket" placeholder="Nama Tiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editHargaTiket" class="col-sm-2 col-form-label">Harga Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="editHargaTiket" placeholder="Harga Tiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editStokTiket" class="col-sm-2 col-form-label">Stok Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="editStokTiket" placeholder="Stok Tiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editTanggalBerlaku" class="col-sm-2 col-form-label">Tanggal Berlaku</label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control" id="editTanggalBerlaku">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editFotoTiket" class="col-sm-2 col-form-label">Foto Tiket</label>
-                        <div class="col-sm-10">
-                            <input type="file" class="form-control" id="editFotoTiket">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editKategoriDropdown" class="col-sm-2 col-form-label">Kategori Tiket</label>
-                        <div class="col-sm-10">
-                            <select class="form-select" id="editKategoriDropdown">
-                                <option selected>Pilih Kategori</option>
-                                <option value="Dewasa">Dewasa</option>
-                                <option value="Anak">Anak</option>
-                                <option value="Keluarga">Keluarga</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="editStatusDropdown" class="col-sm-2 col-form-label">Status</label>
-                        <div class="col-sm-10">
-                            <select class="form-select" id="editStatusDropdown">
-                                <option selected>Pilih Status</option>
-                                <option value="Tersedia">Tersedia</option>
-                                <option value="Habis">Habis</option>
-                                <option value="Dihentikan">Dihentikan</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveChangesEdit">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Modal Edit -->
-
-
-  </body>
+</body>
 </html>
 
 <script>
     function updateStatus(ticketId, status) {
-        // Implement logic to update ticket status using AJAX
-        console.log(`Update status for ticket ${ticketId} to ${status}`);
+        fetch(`/update_status/${ticketId}/${status}`, {
+            method: 'POST',  // Use appropriate HTTP method
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // Add body if needed
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            // Implement any UI update logic
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
-
-    function uploadBuktiPembayaran(ticketId) {
-        // Implement logic to handle bukti pembayaran upload
-        console.log(`Upload bukti pembayaran for ticket ${ticketId}`);
-    }
-
-
-    // function deleteConfirmation(ticketId) {
-    //     if (confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
-    //         // Implement logic to delete the ticket using AJAX or form submission
-    //         console.log(`Delete ticket with ID ${ticketId}`);
-    //     }
-    // }
 
     function deleteTicket(ticketId) {
         if (confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
@@ -291,4 +160,3 @@
         }
     }
 </script>
-

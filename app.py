@@ -343,6 +343,16 @@ def detail_destinasi(destinasi_id):
     return render_template("login.html", msg=msg)
 
 
+@app.route("/getulasan", methods=["GET"])
+def get_ulasan():
+    try:
+        ulasan_data = db.ulasan.find({}, {"_id": 0})  # Ambil semua data ulasan, hilangkan field _id
+        ulasan_list = list(ulasan_data)
+        return jsonify({"ulasan": ulasan_list})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/pesantiket", methods=["POST"])
 def pesantiket():
     namaAttraction = request.form["attractionGive"]
@@ -592,10 +602,13 @@ def konfirmasi_pembayaran(ticket_id):
 def lihat_bukti_pembayaran(ticket_id):
     try:
         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
-
+        
         if tiket_info and tiket_info["status"] == "confirmed":
-            # bukti pembayaran disimpan di folder 
-            return send_from_directory('booking', tiket_info['buktiPembayaran'])
+            file_path = os.path.join('booking', tiket_info['buktiPembayaran'])
+            print("File Path:", file_path)
+            return send_from_directory('booking', os.path.basename(file_path))
+        # if tiket_info and tiket_info["status"] == "confirmed":
+        #     return send_from_directory('booking', tiket_info['buktiPembayaran'])
         else:
             flash('Bukti pembayaran tidak ditemukan atau tiket belum dikonfirmasi', 'danger')
 
