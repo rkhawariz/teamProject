@@ -561,6 +561,7 @@ def manajemen_tiket():
                         "id": str(tiket["_id"]),
                         "namaAttraction": tiket["namaAttraction"],
                         "namaPemesan": tiket["namaPemesan"],
+                        "buktiPembayaran": tiket["buktiPembayaran"],
                         "hargaTiket": tiket["hargaTiket"],
                         "jumlahTiket": tiket["jumlahTiket"],
                         "totalHargaTiket": tiket["totalHargaTiket"],
@@ -612,7 +613,7 @@ def lihat_bukti_pembayaran(ticket_id):
     try:
         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
         
-        if tiket_info and tiket_info["status"] == "confirmed":
+        if tiket_info and tiket_info["status"] == "uploaded":
             file_path = os.path.join('booking', tiket_info['buktiPembayaran'])
             print("File Path:", file_path)
             return send_from_directory('booking', os.path.basename(file_path))
