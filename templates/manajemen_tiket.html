@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,40 @@
             return confirm("Apakah Anda yakin ingin menghapus tiket ini?");
         }
     </script>
+
+    <style>
+        .confirmed-icon-container {
+            text-align: center;
+        }
+
+        .confirmed-icon {
+            color: green;
+            font-size: 20px;
+            margin-right: 5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Gaya untuk kontainer yang menyimpan ikon dan tombol secara horizontal */
+        .icon-button-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Gaya untuk garis pemisah */
+        .divider-line {
+            border-top: 5px solid #ccc;
+            margin: 10px 0;
+            padding-top: 10px;
+        }
+
+        .pending-text {
+            color: red;
+            font-style: italic;
+        }
+    </style>
 </head>
+
 <body>
     {% include 'header.html' %}
     <nav aria-label="breadcrumb" class="m-4 ">
@@ -34,7 +68,7 @@
     <div class="m-4">
         <div class="bg-light rounded h-100 p-4">
             <h6 class="mb-4">Table Ticket</h6>
-            
+
             {% if is_admin %}
             <table class="table">
                 <thead>
@@ -61,31 +95,46 @@
                         <td>{{ tiket.jumlahTiket }}</td>
                         <td>{{ tiket.totalHargaTiket }}</td>
                         <td>{{ tiket.tanggal }}</td>
-                        <td>
+                        <td class="confirmed-icon-container">
                             {% if tiket.status == 'confirmed' %}
-                                <a href="{{ url_for('lihat_bukti_pembayaran', ticket_id=tiket.id) }}" class="btn btn-info" target="_blank">Lihat Bukti Pembayaran</a>
-                            {% else %}
-                                N/A
+                            <i class="fas fa-check confirmed-icon"></i>
+                            {% elif tiket.status == 'pending' %}
+                            <span class="pending-text">Belum upload bukti pembayaran</span>
+                            {% elif tiket.status == 'uploaded' %}
+                            <a href="{{ url_for('lihat_bukti_pembayaran', ticket_id=tiket.id) }}" class="btn btn-info"
+                                target="_blank">
+                                Lihat Bukti Pembayaran
+                            </a>
                             {% endif %}
                         </td>
                         <td>{{ tiket.status }}</td>
                         <td>
-                            {% if tiket.status == 'pending' %}
-                                <a href="{{ url_for('konfirmasi_pembayaran', ticket_id=tiket.id) }}" class="btn btn-success">Konfirmasi Pembayaran</a>
+                            {% if tiket.status in ['pending', 'uploaded'] %}
+                            <a href="{{ url_for('konfirmasi_pembayaran', ticket_id=tiket.id) }}"
+                                class="btn btn-warning confirm-payment-link">
+                                <i class="fas fa-check-circle"></i> <!-- Ganti dengan ikon yang diinginkan -->
+                            </a>
                             {% else %}
-                                <span class="badge badge-success">Terkonfirmasi</span>
+                            <div class="icon-button-container">
+                                <span class="confirmed-badge">
+                                    <i class="fas fa-check"></i> <!-- Ganti dengan ikon yang diinginkan -->
+                                </span>
+                                <div class="divider-line"></div> <!-- Garis pemisah -->
+                            </div>
                             {% endif %}
-                            <button type="button" class="btn btn-danger" onclick="deleteTicket('{{ tiket.id }}')">Delete</button>
-
+                            <div class="icon-button-container">
+                                <button type="button" class="btn btn-danger" onclick="deleteTicket('{{ tiket.id }}')">
+                                    <i class="fas fa-trash-alt"></i> <!-- Ganti dengan ikon hapus -->
+                                </button>
+                            </div>
                         </td>
-
                     </tr>
-                    
+
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-                <p>Anda tidak memiliki akses untuk melihat halaman ini.</p>
+            <p>Anda tidak memiliki akses untuk melihat halaman ini.</p>
             {% endif %}
         </div>
     </div>
@@ -113,39 +162,17 @@
     <!-- Include your other modal if needed -->
 
 </body>
+
 </html>
 
 <script>
     function updateStatus(ticketId, status) {
         fetch(`/update_status/${ticketId}/${status}`, {
-            method: 'POST',  // Use appropriate HTTP method
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            // Add body if needed
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            // Implement any UI update logic
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    }
-
-    function deleteTicket(ticketId) {
-        if (confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
-            fetch(`/delete_ticket/${ticketId}`, {
-                method: 'DELETE',
+                method: 'POST', // Use appropriate HTTP method
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                // Add body if needed
             })
             .then(response => {
                 if (!response.ok) {
@@ -155,11 +182,34 @@
             })
             .then(data => {
                 console.log('Success:', data);
-                location.reload();
+                // Implement any UI update logic
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+    }
+
+    function deleteTicket(ticketId) {
+        if (confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
+            fetch(`/delete_ticket/${ticketId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
     }
 </script>

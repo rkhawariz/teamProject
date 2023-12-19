@@ -444,10 +444,10 @@ def cek_pesanan(nama):
 
 @app.route('/upload_bukti/<ticket_id>', methods=['POST'])
 def upload_bukti(ticket_id):
-    buktiUpload = request.files['buktiUpload']
-    token_receive = request.cookies.get(TOKEN_KEY)
-    
     try:
+        buktiUpload = request.files['buktiUpload']
+        token_receive = request.cookies.get(TOKEN_KEY)
+        
         payload = jwt.decode(
             token_receive,
             SECRET_KEY,
@@ -455,18 +455,16 @@ def upload_bukti(ticket_id):
         )
         user_info = db.users.find_one({"email": payload["id"]})
         
-        buktiUpload = request.files['buktiUpload']
         file_extension = os.path.splitext(buktiUpload.filename)[1]
         namaBuktiUpload = f'static/booking/bukti_pembayaran-{ticket_id}{file_extension}'
 
         buktiUpload.save(namaBuktiUpload)
         
-        # Update tiket dengan status 'uploaded'
         db.tiket.update_one(
             {'_id': ObjectId(ticket_id)},
             {'$set': {
                 'buktiPembayaran': namaBuktiUpload,
-                'status': 'uploaded'  # Menambahkan status 'uploaded'
+                'status': 'uploaded'
             }}
         )
         return jsonify({'message': 'Proof updated successfully', 'status': 'uploaded'}), 200
@@ -475,6 +473,8 @@ def upload_bukti(ticket_id):
         return jsonify({'message': 'Your token has expired'}), 401
     except jwt.exceptions.DecodeError:
         return jsonify({'message': 'There was a problem logging you in'}), 400
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
 
 @app.route("/beranda_admin", methods=["GET"])
 def beranda_admin():
@@ -593,7 +593,7 @@ def konfirmasi_pembayaran(ticket_id):
     try:
         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
 
-        if tiket_info and tiket_info["status"] == "pending":
+        if tiket_info and tiket_info["status"] in ["pending", "uploaded"]:
 
             db.tiket.update_one({"_id": ObjectId(ticket_id)}, {"$set": {"status": "confirmed"}})
             flash('Konfirmasi pembayaran berhasil!', 'success')
