@@ -6,10 +6,13 @@ from pymongo import MongoClient
 import jwt
 from datetime import datetime, timedelta
 import hashlib
-from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, make_response, send_file
 from werkzeug.utils import secure_filename
 from bson import ObjectId
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.pagesizes import letter
+import io
 from io import BytesIO
 import logging
 from flask import send_from_directory
@@ -398,6 +401,7 @@ def cek_pesanan(nama):
         if user_info['nama'] != nama:
             return redirect('/forbidden')
         tiket_list = []
+        tiket_pdf = list(db.tiket.find())
         tiket_info = db.tiket.find({"namaPemesan": nama})
 
         for ticket in tiket_info:
@@ -419,23 +423,42 @@ def cek_pesanan(nama):
             user_info=user_info,
             logged_in=logged_in,
             is_admin=is_admin,
-            tiket_list=tiket_list,
+            tiket_list=tiket_list, 
+            tiket_pdf=tiket_pdf,
         )
     except jwt.ExpiredSignatureError:
         msg = "Your token has expired"
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
-  
+
 @app.route('/upload_bukti/<ticket_id>', methods=['POST'])
 def upload_bukti(ticket_id):
     buktiUpload = request.files['buktiUpload']
-    namaBuktiUpload = f'static/booking/{ticket_id}_{buktiUpload.filename}'
+    token_receive = request.cookies.get(TOKEN_KEY)
     
-    buktiUpload.save(namaBuktiUpload)
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        user_info = db.users.find_one({"email": payload["id"]})
+        # nama_pengguna = user_info.get("nama")
+        
+        buktiUpload = request.files['buktiUpload']
+        file_extension = os.path.split(buktiUpload.filename)[1]
+        namaBuktiUpload = f'static/booking/bukti_pembayaran-{file_extension}'
+
+        buktiUpload.save(namaBuktiUpload)
+        
+        db.tiket.update_one({'_id': ObjectId(ticket_id)}, {'$set': {'buktiPembayaran': namaBuktiUpload}})
+        return jsonify({'message': 'Proof updated successfully'}), 200
     
-    db.tiket.update_one({'_id': ObjectId(ticket_id)}, {'$set': {'buktiPembayaran': namaBuktiUpload}})
-    return jsonify({'message': 'Proof updated successfully'}), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'message': 'Your token has expired'}), 401
+    except jwt.exceptions.DecodeError:
+        return jsonify({'message': 'There was a problem logging you in'}), 400
 
 @app.route("/beranda_admin", methods=["GET"])
 def beranda_admin():
@@ -821,6 +844,55 @@ def simpan_ulasan():
         return jsonify({"status": "success", "message": "Ulasan berhasil disimpan!"})
     except Exception as e:
         return jsonify({"status": "error", "message": f'Gagal menyimpan ulasan: {str(e)}'})
+    
+@app.route('/generate_pdf/<booking_id>')
+def generate_pdf(booking_id):
+    specific_card = db.tiket.find_one({'_id': ObjectId(booking_id)})
+    
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    y_coordinate = 750
+    line_spacing = 20
+    
+    pdf.setFillColorRGB(0, 0, 0.8)  # Set Title Color
+    pdf.setFont("Helvetica-Bold", 16)
+    
+    pdf.setFillColorRGB(0, 0, 0)
+    
+    pdf.setFont("Helvetica", 12)
+    pdf.line(50, 780, 550, 780)
+    pdf.line(50, 50, 550, 50)
+    
+    pdf.drawString(100, y_coordinate, "Trip Wonders | Tiket Anda")
+    y_coordinate -= line_spacing
+    pdf.drawString(100, y_coordinate, f"Nama Pemesan: {specific_card['namaPemesan']}")
+    y_coordinate -= line_spacing
+
+    pdf.drawString(100, y_coordinate, f"Email Pemesan: {specific_card['emailPemesan']}")
+    y_coordinate -= line_spacing
+
+    pdf.drawString(100, y_coordinate, f"Nama Attraction: {specific_card['namaAttraction']}")
+    y_coordinate -= line_spacing
+
+    pdf.drawString(100, y_coordinate, f"Jumlah Tiket: {specific_card['jumlahTiket']}")
+    y_coordinate -= line_spacing
+
+    pdf.drawString(100, y_coordinate, f"Harga Tiket: {specific_card['hargaTiket']}")
+    y_coordinate -= line_spacing
+
+    pdf.drawString(100, y_coordinate, f"Total Harga: {specific_card['totalHargaTiket']}")
+    y_coordinate -= line_spacing
+
+    pdf.drawString(100, y_coordinate, f"Tanggal Keberangkatan: {specific_card['tanggal']}")
+    y_coordinate -= line_spacing
+
+    pdf.save()
+
+    buffer.seek(0)
+    response = make_response(buffer.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=Tiket_{specific_card["namaAttraction"]}.pdf'
+    return response
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)
