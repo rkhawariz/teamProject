@@ -72,12 +72,15 @@
                         <td>
                             {% if tiket.status == 'pending' %}
                                 <a href="{{ url_for('konfirmasi_pembayaran', ticket_id=tiket.id) }}" class="btn btn-success">Konfirmasi Pembayaran</a>
-                                <button type="button" class="btn btn-danger" onclick="deleteTicket('{{ tiket.id }}')">Delete</button>
                             {% else %}
                                 <span class="badge badge-success">Terkonfirmasi</span>
                             {% endif %}
+                            <button type="button" class="btn btn-danger" onclick="deleteTicket('{{ tiket.id }}')">Delete</button>
+
                         </td>
+
                     </tr>
+                    
                     {% endfor %}
                 </tbody>
             </table>
