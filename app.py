@@ -516,6 +516,9 @@ def get_statistik_pemesanan():
 @app.route('/get_statistik_pendapatan', methods=['GET'])
 def get_statistik_pendapatan():
     data = db.tiket.aggregate([
+                {
+            '$match': {'status': 'confirmed'}
+        },
         {
             '$group': {
                 '_id': {'$substr': ['$waktuPemesanan', 0, 7]},
