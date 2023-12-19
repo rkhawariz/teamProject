@@ -252,6 +252,7 @@
                 data-bs-attraction="{{ attraction.judul }}"
                 data-bs-pemesan="{{ user_info.nama }}"
                 data-bs-hargaTiket="{{ attraction.harga }}"
+                data-bs-email="{{ user_info.email }}"
               >
                 Pesan Tiket
               </button>
@@ -286,6 +287,7 @@
                 data-bs-attraction="{{ attraction.judul }}"
                 data-bs-pemesan="{{ user_info.nama }}"
                 data-bs-hargaTiket="{{ attraction.harga }}"
+                data-bs-email="{{ user_info.email }}"
               >
                 Pesan Tiket
               </button>
@@ -320,6 +322,7 @@
                   data-bs-attraction="{{ attraction.judul }}"
                   data-bs-pemesan="{{ user_info.nama }}"
                   data-bs-hargaTiket="{{ attraction.harga }}"
+                  data-bs-email="{{ user_info.email }}"
                 >
                   Pesan Tiket
                 </button>
@@ -375,6 +378,12 @@
                   >Nama Pemesan:</label
                 >
                 <input type="text" class="pemesan form-control" id="pemesan" name="namaPemesan" readonly/>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="col-form-label"
+                  >Email Pemesan:</label
+                >
+                <input type="email" class="email form-control" id="email" name="emailPemesan" readonly/>
               </div>
               <div class="mb-3">
                 <label for="message-text" class="col-form-label"
@@ -646,12 +655,18 @@
         const attraction = button.getAttribute("data-bs-attraction");
         const pemesan = button.getAttribute("data-bs-pemesan");
         const hargaTiket = button.getAttribute("data-bs-hargaTiket");
+        const email = button.getAttribute("data-bs-email");
+        console.log(email)
 
         myModal.querySelector(
           ".modal-title"
         ).textContent = `Pesan Tiket ${attraction}`;
         const inputPemesan = myModal.querySelector(".modal-body .pemesan");
+        const inputEmail = myModal.querySelector(
+          ".modal-body .email"
+        );
         inputPemesan.value = pemesan;
+        inputEmail.value = email;
         const inputHargaTiket = myModal.querySelector(
           ".modal-body .hargaTiket"
         );

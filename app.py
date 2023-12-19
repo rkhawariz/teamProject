@@ -343,6 +343,7 @@ def detail_destinasi(destinasi_id):
 def pesantiket():
     namaAttraction = request.form["attractionGive"]
     namaPemesan = request.form["namaPemesan"]
+    emailPemesan = request.form["emailPemesan"]
     hargaTiket = request.form["hargaTiket"]
     jumlahTiket = request.form["jumlahTiket"]
     totalHargaTiket = request.form["totalHargaTiket"]
@@ -350,6 +351,7 @@ def pesantiket():
     doc = {
         "namaAttraction": namaAttraction,
         "namaPemesan": namaPemesan,
+        "emailPemesan": emailPemesan,
         "hargaTiket": hargaTiket,
         "jumlahTiket": jumlahTiket,
         "totalHargaTiket": totalHargaTiket,
