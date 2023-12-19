@@ -12,6 +12,8 @@ from bson import ObjectId
 from reportlab.pdfgen import canvas
 from io import BytesIO
 from flask import send_from_directory
+from flask import send_file
+# from flask_mail import Message
 
 
 app = Flask(__name__)
@@ -357,11 +359,11 @@ def pesantiket():
         "status": "pending",
         "buktiPembayaran": "",
         "e-ticket": "",
-        "waktuPemesanan": datetime.now().strftime('%Y-%m-%d %H:%M')
     }
     db.tiket.insert_one(doc)
     return redirect(url_for("home"))
-  
+
+
 @app.route("/about", methods=["GET"])
 def about():
     token_receive = request.cookies.get(TOKEN_KEY)
@@ -401,7 +403,6 @@ def cek_pesanan(nama):
             tiket_data = {
                 "_id": str(ticket['_id']),
                 "namaAttraction": ticket["namaAttraction"],
-                "namaPemesan": ticket["namaPemesan"],
                 "jumlahTiket": ticket["jumlahTiket"],
                 "hargaTiket": ticket["hargaTiket"],
                 "totalHargaTiket": ticket["totalHargaTiket"],
@@ -423,7 +424,7 @@ def cek_pesanan(nama):
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
-  
+
 @app.route('/upload_bukti/<ticket_id>', methods=['POST'])
 def upload_bukti(ticket_id):
     buktiUpload = request.files['buktiUpload']
@@ -458,6 +459,7 @@ def beranda_admin():
     return render_template("login.html", msg=msg)
 
 
+# ...
 
 @app.route("/manajemen_tiket", methods=["GET"])
 def manajemen_tiket():
@@ -507,6 +509,40 @@ def manajemen_tiket():
     return render_template("manajemen_tiket.html", msg=msg, user_info=user_info)
 
 
+@app.route("/manajemen_tiket/lihat_bukti_pembayaran/<ticket_id>", methods=["GET"])
+def lihat_bukti_pembayaran(ticket_id):
+    try:
+        tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
+
+        if tiket_info and tiket_info["status"] == "confirmed":
+            bukti_pembayaran_path = tiket_info.get("buktiPembayaranPath")
+
+            if bukti_pembayaran_path:
+                # Kirimkan file bukti pembayaran
+                return send_file(bukti_pembayaran_path, as_attachment=True)
+
+    except Exception as e:
+        flash(f'Gagal. Error: {str(e)}', 'danger')
+
+    return redirect(url_for('manajemen_tiket'))
+
+# @app.route("/manajemen_tiket/konfirmasi_pembayaran/<ticket_id>", methods=["GET"])
+# def konfirmasi_pembayaran(ticket_id):
+#     try:
+#         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
+
+#         if tiket_info and tiket_info["status"] == "pending":
+#             # Lakukan logika konfirmasi pembayaran di sini
+#             # Misalnya, set status tiket menjadi "confirmed"
+#             db.tiket.update_one({"_id": ObjectId(ticket_id)}, {"$set": {"status": "confirmed"}})
+#             flash('Konfirmasi pembayaran berhasil!', 'success')
+#         else:
+#             flash('Tiket tidak ditemukan atau sudah dikonfirmasi', 'danger')
+
+#     except Exception as e:
+#         flash(f'Gagal. Error: {str(e)}', 'danger')
+
+#     return redirect(url_for('manajemen_tiket'))
 
 @app.route("/manajemen_tiket/konfirmasi_pembayaran/<ticket_id>", methods=["GET"])
 def konfirmasi_pembayaran(ticket_id):
@@ -514,16 +550,15 @@ def konfirmasi_pembayaran(ticket_id):
         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
 
         if tiket_info and tiket_info["status"] == "pending":
-
-            db.tiket.update_one({"_id": ObjectId(ticket_id)}, {"$set": {"status": "confirmed"}})
-            flash('Konfirmasi pembayaran berhasil!', 'success')
+            # Render halaman dengan opsi untuk melihat bukti pembayaran, konfirmasi, atau menolak
+            return render_template("konfirmasi_pembayaran.html", tiket_info=tiket_info)
         else:
             flash('Tiket tidak ditemukan atau sudah dikonfirmasi', 'danger')
-
     except Exception as e:
         flash(f'Gagal. Error: {str(e)}', 'danger')
 
     return redirect(url_for('manajemen_tiket'))
+
 
 
 
@@ -533,8 +568,8 @@ def lihat_bukti_pembayaran(ticket_id):
         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
 
         if tiket_info and tiket_info["status"] == "confirmed":
-            # bukti pembayaran disimpan di folder 
-            return send_from_directory('booking', tiket_info['buktiPembayaran'])
+            # bukti pembayaran disimpan di folder
+            return send_from_directory('uploads', tiket_info['buktiPembayaran'])
         else:
             flash('Bukti pembayaran tidak ditemukan atau tiket belum dikonfirmasi', 'danger')
 
@@ -543,19 +578,69 @@ def lihat_bukti_pembayaran(ticket_id):
 
     return redirect(url_for('manajemen_tiket'))
 
-
-@app.route("/delete_ticket/<ticket_id>", methods=["DELETE"])
-def delete_ticket(ticket_id):
+@app.route("/manajemen_tiket/proses_konfirmasi_pembayaran/<ticket_id>", methods=["POST"])
+def proses_konfirmasi_pembayaran(ticket_id):
     try:
-        # Implement logic to delete the ticket from the database using ticket_id
-        db.tiket.delete_one({"_id": ObjectId(ticket_id)})
-        return jsonify({"message": "Ticket deleted successfully"})
+        action = request.form.get('action')
+
+        if action == 'confirm':
+            # mengonfirmasi pembayaran
+            db.tiket.update_one({"_id": ObjectId(ticket_id)}, {"$set": {"status": "confirmed"}})
+            flash('Konfirmasi pembayaran berhasil!', 'success')
+
+        elif action == 'reject':
+            # menolak pembayaran
+            db.tiket.update_one({"_id": ObjectId(ticket_id)}, {"$set": {"status": "rejected"}})
+            flash('Pesanan berhasil ditolak', 'danger')
+        else:
+            flash('Aksi tidak valid', 'danger')
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        flash(f'Gagal. Error: {str(e)}', 'danger')
+
+    return redirect(url_for('manajemen_tiket'))
+
+
+
+# @app.route("/lihat_bukti_pembayaran/<ticket_id>", methods=["GET"])
+# def lihat_bukti_pembayaran(ticket_id):
+#     try:
+#         tiket_info = db.tiket.find_one({"_id": ObjectId(ticket_id)})
+
+#         if tiket_info and tiket_info["status"] == "confirmed" and "bukti_pembayaran" in tiket_info:
+
+#             return send_from_directory("uploads", tiket_info["bukti_pembayaran"])
+#         else:
+#             return "Bukti pembayaran tidak ditemukan atau tiket belum dikonfirmasi."
+#     except Exception as e:
+#         return f'Gagal. Error: {str(e)}'
+# if tiket_info:
+#     # Ambil informasi pengguna dari tiket
+#     email_pemesan = tiket_info.get("emailPemesan")  # Gantilah dengan field yang sesuai
+
+#     # Logika pengiriman email penolakan
+#     subject = "Pesanan Anda ditolak"
+#     body = "Sayangnya, pesanan Anda telah ditolak. Silakan hubungi layanan pelanggan kami untuk informasi lebih lanjut."
+
+#     # Kirim email
+#     send_rejection_email(email_pemesan, subject, body)  # Implementasikan send_rejection_email sesuai kebutuhan
+
+# # Setelah memberitahu pengguna, Anda dapat melakukan update status tiket
+# db.tiket.update_one({"_id": ObjectId(ticket_id)}, {"$set": {"status": "rejected"}})
+# flash('Pesanan berhasil ditolak. Pesan penolakan telah dikirim ke email Anda.', 'danger')
+
+
+# @app.route("/delete_ticket/<ticket_id>", methods=["DELETE"])
+# def delete_ticket(ticket_id):
+#     try:
+#         db.tiket.delete_one({"_id": ObjectId(ticket_id)})
+#         return jsonify({"message": "Ticket deleted successfully"})
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
 @app.route("/ulasan_rekomendasi", methods=["GET"])
-def list_ulasan_rekomendasi():
+def ulasan_rekomendasi():
     token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
@@ -563,13 +648,8 @@ def list_ulasan_rekomendasi():
         is_admin = user_info.get("role") == "admin"
         logged_in = True
         if is_admin:
-            data_ulasan = db.ulasan.find({},{'_id': False})
-            
-            list_ulasan = list(data_ulasan)
-            
             return render_template(
                 "ulasan_dan_rekom.html",
-                list_ulasan=list_ulasan,
                 user_info=user_info,
                 logged_in=logged_in,
                 is_admin=is_admin,
@@ -581,7 +661,7 @@ def list_ulasan_rekomendasi():
     except jwt.exceptions.DecodeError:
         msg = "There was a problem logging you in"
     return render_template("login.html", msg=msg)
-  
+
 
 @app.route("/manajemen_user", methods=["GET"])
 def manajemen_user():
@@ -622,47 +702,42 @@ def manajemen_user():
     return render_template("login.html", msg=msg)
 
 
-@app.route('/edit_user/<string:user_id>', methods=['POST'])
-def edit_user(user_id):
+@app.route('/edit_user', methods=['POST'])
+def edit_user_by_username(username, edited_email, edited_role, edited_status):
     try:
-        # Convert user_id to ObjectId
-        user_id_object = ObjectId(user_id)
-
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        role = request.form['role']
-        status = request.form['status']
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
-
-        doc = {
-            'nama': username,
-            'email': email,
-            'password': hashed_password,
-            'role': role,
-            'status': status
-        }
-
-        db.user.update_one({'_id': user_id_object}, {'$set': doc})
-
-        return jsonify({'message': 'Data updated successfully'})
-    except Exception as e:
-        return jsonify({'error': str(e)})
-
-@app.route('/delete_user/<string:user_id>', methods=['POST'])
-def delete_user(user_id):
-    try:
-        user_id_object = ObjectId(user_id)
-
-        result = db.user.delete_one({'_id': user_id_object})
-
-        if result.deleted_count == 1:
-            return jsonify({'message': 'User deleted successfully'})
+        # Update user berdasarkan username
+        result = db.user.update_many(
+            {"username": username},
+            {
+                "$set": {
+                    "email": edited_email,
+                    "role": edited_role,
+                    "status": edited_status
+                }
+            }
+        )
+        
+        if result.modified_count > 0:
+            return {"status": "success", "message": f"Users with username '{username}' updated successfully."}
         else:
-            return jsonify({'error': 'User not found'})
+            return {"status": "error", "message": f"No users found with username '{username}' or no changes made."}
 
     except Exception as e:
-        return jsonify({'error': str(e)})  
+        return {"status": "error", "message": str(e)}
+
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    if request.method == 'POST':
+        user_id = request.form['userId'] 
+
+        # for user in users:
+        #     if user['id'] == int(user_id):
+        #         users.remove(user)
+        #         break
+
+
+        return "Success" 
+
 
 
 @app.route("/profile_admin/<nama>", methods=["GET"])
@@ -768,14 +843,11 @@ def simpan_ulasan():
         namaAttraction = request.form['namaAttraction']
         rating = request.form['rating']
         review = request.form['review']
-        pemberiUlasan = request.form['pemberiUlasan']  
 
         doc = {
             "namaAttraction" : namaAttraction,
             "rating": rating,
             "review": review,
-            "pemberiUlasan": pemberiUlasan,
-            "waktu": datetime.now().strftime("%B %Y")
         }
         
         db.ulasan.insert_one(doc)
